@@ -1,0 +1,6 @@
+:root{
+    --columns: 4;
+    --g: var(--columns) - 1;
+    --basis: calc(100% / var(--columns) - 1% );
+    --gap: calc((100% - (var(--columns)*var(--basis))) / (var(--g)) );
+}
