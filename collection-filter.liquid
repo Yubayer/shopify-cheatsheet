@@ -1,0 +1,78 @@
+{% comment %}
+  {% render 'product-filter', 
+    product: product, 
+    collection: collection 
+  %}
+{% endcomment %}
+
+{% for filter in collection.filters %}
+  {% if filter.label == "Price" %}
+   <div class="card mb-4">
+     <div class="card-header">
+       <h2>Price Range</h2>
+          {% liquid
+            if filter.min_value.value
+              assign minPrice = filter.min_value.value | divided_by: 100
+            else 
+              assign minPrice = 0 
+            endif
+
+            if filter.max_value.value
+              assign maxPrice = filter.max_value.value | divided_by: 100.00
+            else
+              assign maxPrice = filter.range_max | divided_by: 100.00
+            endif
+
+            assign maxRange= filter.range_max | divided_by: 100.00
+            assign left = minPrice | divided_by: maxRange | times: 100 
+            assign toRight = maxPrice | divided_by: maxRange | times: 100 
+            assign right = 100 | minus: toRight 
+          %}
+     </div>
+     <div class="card-body priceRangeSlider">
+       <div class="wrapper">
+        <div class="price-input">
+          <div class="field">
+            <span>Min</span>
+            <input name="{{ filter.min_value.param_name }}" type="number" class="input-min" value="{{ minPrice }}">
+          </div>
+          <div class="separator">-</div>
+          <div class="field">
+            <span>Max</span>
+            <input name="{{ filter.max_value.param_name }}" type="number" class="input-max" value="{{ maxPrice }}">
+          </div>
+        </div>
+        <div class="slider">
+          <div class="progress" style="left: {{ left | append: '%' }}; right: {{ right | append: '%' }}"></div>
+        </div>
+        <div class="range-input">
+          <input name="{{ filter.min_value.param_name }}" type="range" class="range-min" min="0" max="{{ maxRange }}" value="{{ minPrice }}" step="1">
+          <input name="{{ filter.max_value.param_name }}" type="range" class="range-max" min="0" max="{{ maxRange }}" value="{{ maxPrice }}" step="1">
+        </div>
+      </div>
+     </div>
+   </div>
+  {% else %}
+  <div class="card mb-4" id"">
+    <div class="card-header">
+      <h2>{{ filter.label | escape }}</h2>
+    </div>
+    <div class="card-body">
+      {% for value in filter.values %}
+        {% if value.count >= 0 %}
+          <h3>
+          <input type="checkbox"
+            class="product-filter"
+            name="{{ value.param_name }}"
+            value="{{ value.value }}"
+            id="Filter-{{ filter.label | escape }}-{{ forloop.index }}"
+            {% if value.active %}checked{% endif %}
+            {% if value.count == 0 and value.active == false %}disabled{% endif %}
+          > {{ value.value }} [{{ value.count }}] <br>
+          </h3>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+  {% endif %}
+{% endfor %}
