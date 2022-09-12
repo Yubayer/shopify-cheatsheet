@@ -1,0 +1,35 @@
+// mobile slider whten desktop, slider will destory
+<script>
+    let featuresTimerId, featuresSwiper
+    function featureMobileSliderFunc() {
+        if ( screen.width >= 481 ) {
+            if ( featuresSwiper !== undefined ) featuresSwiper.destroy( true, true );
+            return;
+        } else if ( screen.width <= 480 ) {
+            featuresSwiper = undefined
+            featuresSwiper = new Swiper ('.features-x-slider', {
+                grabCursor: true,
+                pagination: {
+                    el: ".swiper-pagination",
+                    clickable: true
+                },
+            });
+        }
+    }
+    
+    let featureDebounceFunc = (func, delay) => {
+        clearTimeout(featuresTimerId)
+        featuresTimerId = setTimeout(() => { func.call(this) }, delay);
+  
+    }
+    
+    window.addEventListener("resize", function(e) {
+        featureDebounceFunc(featureMobileSliderFunc, 100)
+    })
+    
+    let callFirstFeature = setTimeout(() => {
+        featureMobileSliderFunc()
+        clearTimeout(callFirstFeature)
+    }, 0)
+    
+  </script>
