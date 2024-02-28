@@ -1,0 +1,521 @@
+
+
+{% capture content %}<!doctype html>
+<html class="no-js" lang="{{ shop.locale }}">
+<head>
+<!-- Start of Shoplift scripts -->
+{% render 'shoplift' %}
+<!-- End of Shoplift scripts -->
+
+
+  {% if template.suffix == "novaa-light-pad-pricetes-pso" %}
+  {% endif %}
+
+  
+  <!-- Basic page needs ================================================== -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+
+  {% if settings.favicon %}
+    <link rel="shortcut icon" href="{{ settings.favicon | img_url: '32x32' }}" type="image/png" />
+  {% endif %}
+
+  <!-- Title and description ================================================== -->
+  <title>
+  {{ page_title }}{% if current_tags %}{% assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags }}{% endif %}{% if current_page != 1 %} &ndash; {{ 'general.meta.page' | t: page: current_page }}{% endif %}{% unless page_title contains shop.name %} &ndash; {{ shop.name }}{% endunless %}
+  </title>
+
+  {% if page_description %}
+  <meta name="description" content="{{ page_description | escape }}">
+  {% endif %}
+
+  <!-- Helpers ================================================== -->
+  {% include 'social-meta-tags' %}
+  <link rel="canonical" href="{{ canonical_url }}">
+  <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+  <meta name="theme-color" content="{{ settings.color_primary }}">
+ {% include 'theme-style' %}
+  <!-- CSS ================================================== -->
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag | replace: ' href=', ' data-href='}}
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag | replace: ' href=', ' data-href='}}
+  {{ 'custom.css' | asset_url | stylesheet_tag }}
+  {{ 'product-card-new.css' | asset_url | stylesheet_tag }}
+  {{ 'component-custom-elements.css' | asset_url | stylesheet_tag }}
+  
+<style>
+  .js_tbn_deal_coin{
+   display: none!important; 
+  }
+  html {
+    /* scroll-behavior: smooth; */
+  }
+</style>
+  <!-- Sections ================================================== -->
+  <script>
+    window.theme = window.theme || {};
+    theme.strings = {
+      zoomClose: {{ "products.zoom.close" | t | json }},
+      zoomPrev: {{ "products.zoom.prev" | t | json }},
+      zoomNext: {{ "products.zoom.next" | t | json }},
+      moneyFormat: {{ shop.money_format | json }},
+      addressError: {{ 'home_page.map.address_error' | t | json }},
+      addressNoResults: {{ 'home_page.map.address_no_results' | t | json }},
+      addressQueryLimit: {{ 'home_page.map.address_query_limit_html' | t | json }},
+      authError: {{ 'home_page.map.auth_error_html' | t | json }},
+      cartEmpty: {{ 'cart.general.empty' | t | json }},
+      cartCookie: {{ 'cart.general.cookies_required' | t | json }},
+      cartSavings: {{ 'cart.general.savings_html' | t: savings: '[savings]' | json }}
+    };
+    theme.settings = {
+      cartType: {{ settings.cart_type | json }},
+      gridType: {{ settings.collection_products_grid | json }}
+    };
+  </script>
+
+   {% include 'jquery' %}
+<!--   {{ 'jquery-2.2.3.min.js' | asset_url | script_tag }} -->
+
+  <script src="{{ 'global-pso.js' | asset_url }}"></script>
+  <script src="{{ 'lazysizes.min.js' | asset_url }}" async="async"></script>
+
+  <script src="{{ 'theme.js' | asset_url }}" defer="defer"></script>
+
+
+
+
+  {% include 'vital-loader' %}
+  {{ content_for_header }}
+  {{ 'bsub.js' | asset_url | script_tag }}
+{{ 'bsub.scss.css' | asset_url | stylesheet_tag }}
+
+
+
+  {% comment %} SLICK SLIDER {% endcomment %}
+  <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.css"/>
+  <script type="text/javascript" src="//cdn.jsdelivr.net/npm/slick-carousel@1.8.1/slick/slick.min.js"></script>
+  <script>console.log('OLEG')</script>
+  {% comment %} END SLICK SLIDER {% endcomment %}
+  
+
+
+<script>
+  /* Modernizr 2.8.3 (Custom Build) | MIT & BSD
+ * Build: http://modernizr.com/download/#-fontface-csstransforms-csstransforms3d-touch-mq-cssclasses-teststyles-testprop-testallprops-prefixes-domprefixes-css_pointerevents-cssclassprefix:supports!
+ */
+;window.Modernizr=function(a,b,c){function A(a){j.cssText=a}function B(a,b){return A(m.join(a+";")+(b||""))}function C(a,b){return typeof a===b}function D(a,b){return!!~(""+a).indexOf(b)}function E(a,b){for(var d in a){var e=a[d];if(!D(e,"-")&&j[e]!==c)return b=="pfx"?e:!0}return!1}function F(a,b,d){for(var e in a){var f=b[a[e]];if(f!==c)return d===!1?a[e]:C(f,"function")?f.bind(d||b):f}return!1}function G(a,b,c){var d=a.charAt(0).toUpperCase()+a.slice(1),e=(a+" "+o.join(d+" ")+d).split(" ");return C(b,"string")||C(b,"undefined")?E(e,b):(e=(a+" "+p.join(d+" ")+d).split(" "),F(e,b,c))}var d="2.8.3",e={},f=!0,g=b.documentElement,h="modernizr",i=b.createElement(h),j=i.style,k,l={}.toString,m=" -webkit- -moz- -o- -ms- ".split(" "),n="Webkit Moz O ms",o=n.split(" "),p=n.toLowerCase().split(" "),q={},r={},s={},t=[],u=t.slice,v,w=function(a,c,d,e){var f,i,j,k,l=b.createElement("div"),m=b.body,n=m||b.createElement("body");if(parseInt(d,10))while(d--)j=b.createElement("div"),j.id=e?e[d]:h+(d+1),l.appendChild(j);return f=["&#173;",'<style id="s',h,'">',a,"</style>"].join(""),l.id=h,(m?l:n).innerHTML+=f,n.appendChild(l),m||(n.style.background="",n.style.overflow="hidden",k=g.style.overflow,g.style.overflow="hidden",g.appendChild(n)),i=c(l,a),m?l.parentNode.removeChild(l):(n.parentNode.removeChild(n),g.style.overflow=k),!!i},x=function(b){var c=a.matchMedia||a.msMatchMedia;if(c)return c(b)&&c(b).matches||!1;var d;return w("@media "+b+" { #"+h+" { position: absolute; } }",function(b){d=(a.getComputedStyle?getComputedStyle(b,null):b.currentStyle)["position"]=="absolute"}),d},y={}.hasOwnProperty,z;!C(y,"undefined")&&!C(y.call,"undefined")?z=function(a,b){return y.call(a,b)}:z=function(a,b){return b in a&&C(a.constructor.prototype[b],"undefined")},Function.prototype.bind||(Function.prototype.bind=function(b){var c=this;if(typeof c!="function")throw new TypeError;var d=u.call(arguments,1),e=function(){if(this instanceof e){var a=function(){};a.prototype=c.prototype;var f=new a,g=c.apply(f,d.concat(u.call(arguments)));return Object(g)===g?g:f}return c.apply(b,d.concat(u.call(arguments)))};return e}),q.touch=function(){var c;return"ontouchstart"in a||a.DocumentTouch&&b instanceof DocumentTouch?c=!0:w(["@media (",m.join("touch-enabled),("),h,")","{#modernizr{top:9px;position:absolute}}"].join(""),function(a){c=a.offsetTop===9}),c},q.csstransforms=function(){return!!G("transform")},q.csstransforms3d=function(){var a=!!G("perspective");return a&&"webkitPerspective"in g.style&&w("@media (transform-3d),(-webkit-transform-3d){#modernizr{left:9px;position:absolute;height:3px;}}",function(b,c){a=b.offsetLeft===9&&b.offsetHeight===3}),a},q.fontface=function(){var a;return w('@font-face {font-family:"font";src:url("https://")}',function(c,d){var e=b.getElementById("smodernizr"),f=e.sheet||e.styleSheet,g=f?f.cssRules&&f.cssRules[0]?f.cssRules[0].cssText:f.cssText||"":"";a=/src/i.test(g)&&g.indexOf(d.split(" ")[0])===0}),a};for(var H in q)z(q,H)&&(v=H.toLowerCase(),e[v]=q[H](),t.push((e[v]?"":"no-")+v));return e.addTest=function(a,b){if(typeof a=="object")for(var d in a)z(a,d)&&e.addTest(d,a[d]);else{a=a.toLowerCase();if(e[a]!==c)return e;b=typeof b=="function"?b():b,typeof f!="undefined"&&f&&(g.className+=" supports-"+(b?"":"no-")+a),e[a]=b}return e},A(""),i=k=null,e._version=d,e._prefixes=m,e._domPrefixes=p,e._cssomPrefixes=o,e.mq=x,e.testProp=function(a){return E([a])},e.testAllProps=G,e.testStyles=w,g.className=g.className.replace(/(^|\s)no-js(\s|$)/,"$1$2")+(f?" supports-js supports-"+t.join(" supports-"):""),e}(this,this.document),Modernizr.addTest("pointerevents",function(){var a=document.createElement("x"),b=document.documentElement,c=window.getComputedStyle,d;return"pointerEvents"in a.style?(a.style.pointerEvents="auto",a.style.pointerEvents="x",b.appendChild(a),d=c&&c(a,"").pointerEvents==="auto",b.removeChild(a),!!d):!1});
+  </script>
+<!--   {{ 'modernizr.min.js' | asset_url | script_tag }} -->
+
+  {% comment %}
+    If you store has customer accounts disabled, you can remove the following JS file
+  {% endcomment %}
+  {% if request.page_type contains 'customers/' %}
+    {{ 'shopify_common.js' | shopify_asset_url | script_tag }}
+  {% endif %}
+
+<!--Gem_Page_Header_Script-->
+{% include 'gem-app-header-scripts' %}
+<!--End_Gem_Page_Header_Script-->
+
+    
+{% unless template.suffix == "novaa-light-pad-pricetes-pso" %} 
+  
+
+<!-- New crsoptimize -->
+<script type="text/javascript" src="https://crsoptimize.conversionrate.store/comp/iAPgATkiWP.js"></script>
+
+
+{% render 'opinew_head' %}
+
+
+  
+  <!-- PLM Microsoft Clarity script -->
+  <script type="text/javascript">
+    (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+    })(window, document, "clarity", "script", "ik7d45zyfs");
+</script>
+
+<!-- PLM - TrustBox script -->
+<script type="text/javascript" src="//widget.trustpilot.com/bootstrap/v5/tp.widget.bootstrap.min.js" async></script>
+<!-- End TrustBox script -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.3.0/swiper-bundle.min.js" integrity="sha512-QokzG/B/9i5X3BYbmuyNn2ah9EiApK5KY4saOYZRCQINuB+X52ED0L3RCc/1x7YUA85qaFZ9uoB4x5SmkLGCJQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Swiper/10.3.0/swiper-bundle.min.css" integrity="sha512-ryx4QW6sYyQthh6MIGW1cDEfNuIwTsvWtORXg5t3sqmh3TSNmqMr+VBN5N0T+z0GqqsiDJ5O8YhP4diuBGmcrw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  <!-- PLM : shareasale script -->
+  <script src="https://www.dwin1.com/64860.js" type="text/javascript" defer="defer"></script>
+{% endunless %}
+
+
+  
+  </head>
+
+{% comment %}
+  Add the page template as a class for easy page or template specific styling.
+{% endcomment %}
+<body id="{{ page_title | handle }}" class="{% if customer %}customer-logged-in {% endif %}template-{{ request.page_type | handle }}">
+
+  {% section 'custom-announcement' %}
+  {% # section 'header' %}
+  {%  section 'header-new' %}
+  
+  <div id="CartDrawer" class="drawer drawer--right drawer--has-fixed-footer">
+    <div class="drawer__fixed-header">
+      <div class="drawer__header">
+        <div class="drawer__title">{{ 'cart.general.title' | t }}</div>
+        <div class="drawer__close">
+          <button type="button" class="icon-fallback-text drawer__close-button js-drawer-close">
+            <span class="icon icon-x" aria-hidden="true"></span>
+            <span class="fallback-text">{{ 'cart.general.close_cart' | t }}</span>
+          </button>
+        </div>
+      </div>
+    </div>
+    <div class="drawer__inner">
+      <div id="CartContainer" class="drawer__cart">
+         <script>
+            
+            let allProducts = {
+               {% for product in collections.all.products %}
+                 '{{product.selected_or_first_available_variant.id}}' : {
+                 
+                      'title': '{{ product.title }}',
+                      'url': '{{product.url}}',
+                      'img': '{{product.featured_image | img_url: 'medium'}}',
+                      'compare': '{{product.compare_at_price}}',
+                      'price':  '{{product.price}}',
+                      'id':  '{{product.id}}',
+                      'variantId':  '{{product.selected_or_first_available_variant.id}}',
+                      'hasVariant': 'false',
+                      'qty': 1
+                },
+               {% endfor %}
+            };
+  
+            let bundleObj = {
+             {% for product in collections.all.products %}
+                 {% if product.id == 6644510294070 %}
+                      {% assign my_product = product %} 
+                   
+                      'title': '{{ my_product.title }}',
+                      'url': '{{my_product.url}}',
+                      'img': '{{my_product.featured_image | img_url: 'medium'}}',
+                      'compare': '{{my_product.compare_at_price}}',
+                      'price':  '{{my_product.price}}',
+                      'id':  '{{my_product.id}}',
+                      'variantId':  '{{my_product.selected_or_first_available_variant.id}}',
+                      'hasVariant': 'false',
+                      'qty': 1
+                {% endif %}
+             {% endfor %}
+            };
+  
+            {% assign up_product_slide_in_1 = all_products["novaa-oral-care-gums-periodontal-treatment"] %}
+            {% assign up_product_slide_in_2 = all_products["novaa-light-pro-red-light-laser-therapy-device"] %}
+            {% assign up_product_slide_in_3 = all_products["laser-red-light-therapy"] %}
+  
+            let upsellObj = [
+                {
+                      'title': '{{ up_product_slide_in_1.title }}',
+                      'url': '{{up_product_slide_in_1.url}}',
+                      'img': '{{up_product_slide_in_1.featured_image | img_url: 'medium'}}',
+                      'compare': '{{up_product_slide_in_1.compare_at_price}}',
+                      'price':  '{{up_product_slide_in_1.price}}',
+                      'id':  '{{up_product_slide_in_1.id}}',
+                      'variantId':  '{{up_product_slide_in_1.selected_or_first_available_variant.id}}',
+                      'hasVariant': 'false',
+                      'qty': 1
+                },
+                {
+                      'title': '{{ up_product_slide_in_2.title }}',
+                      'url': '{{up_product_slide_in_2.url}}',
+                      'img': '{{up_product_slide_in_2.featured_image | img_url: 'medium'}}',
+                      'compare': '{{up_product_slide_in_2.compare_at_price}}',
+                      'price':  '{{up_product_slide_in_2.price}}',
+                      'id':  '{{up_product_slide_in_2.id}}',
+                      'variantId':  '{{up_product_slide_in_2.selected_or_first_available_variant.id}}',
+                      'hasVariant': 'false',
+                      'qty': 1
+                },
+                {
+                      'title': '{{ up_product_slide_in_3.title }}',
+                      'url': '{{up_product_slide_in_3.url}}',
+                      'img': '{{up_product_slide_in_3.featured_image | img_url: 'medium'}}',
+                      'compare': '{{up_product_slide_in_3.compare_at_price}}',
+                      'price':  '{{up_product_slide_in_3.price}}',
+                      'id':  '{{up_product_slide_in_3.id}}',
+                      'variantId':  '{{up_product_slide_in_3.selected_or_first_available_variant.id}}',
+                      'hasVariant': 'false',
+                      'qty': 1
+                }
+            ];
+          </script>
+      </div>
+    </div>
+  </div>
+    {% if template contains 'gem'  %}
+      {% assign isGemPage = true %} 
+    {% else %}
+      {% assign isGemPage = false %}     
+    {% endif %} 
+
+  <div id="PageContainer" class="page-container">
+    <main class="main-content" role="main">
+      {% unless request.page_type == "index" or  request.page_type == "collection" or template.name == 'product' and isGemPage == false %}
+        <div class="wrapper">
+      {% endunless %}
+        {{ content_for_layout }}{% if page.handle  == 'faq' %}<div>{%include 'product_customfaq' %}</div>{% endif %}
+      {% unless request.page_type == "index"  or template.name == 'product' and isGemPage == false %}
+        </div>
+      {% endunless %}
+    </main>
+
+    <hr class="hr--large">
+
+    {% section 'footer' %}
+
+  </div>
+
+  {% comment %}
+    Template-specific js
+  {% endcomment %}
+  <script>
+    {% if resetPassword %}
+      $(function() {
+        timber.initCache();
+        timber.resetPasswordSuccess();
+      });
+    {% endif %}
+  </script>
+
+  {% comment %}
+    Ajaxify your cart with this plugin.
+    Documentation:
+      - http://shopify.com/timber#ajax-cart
+  {% endcomment %}
+  {% if settings.cart_type == 'drawer' %}
+    {% include 'ajax-cart-template' %}
+  {% endif %}
+
+  {% if request.page_type == 'product' or request.page_type == 'index' %}
+      <script>
+        // Override default values of shop.strings for each template.
+        // Alternate product templates can change values of
+        // add to cart button, sold out, and unavailable states here.
+        theme.productStrings = {
+          addToCart: {{ 'products.product.add_to_cart' | t | json }},
+          soldOut: {{ 'products.product.sold_out' | t | json }},
+          unavailable: {{ 'products.product.unavailable' | t | json }}
+        }
+      </script>
+    {% endif %}
+
+  <div id="SearchModal" class="mfp-hide">
+    {% include 'search-bar', search_btn_style: 'btn', search_bar_location: 'search-bar--modal' %}
+  </div>
+  <ul hidden>
+    <li id="a11y-refresh-page-message">{{ 'general.accessibility.refresh_page' | t }}</li>
+    <li id="a11y-selection-message">{{ 'general.accessibility.selection_help' | t }}</li>
+    <li id="a11y-slideshow-info">{{ 'home_page.slideshow.navigation_instructions' | t }}</li>
+  </ul>
+<!--Gem_Page_Footer_Script-->
+  {%- liquid
+    assign gpTemplateSuffix = template.suffix
+    assign arrSplitSuffix = gpTemplateSuffix | split: '-'
+    if gpTemplateSuffix contains 'gem-' and gpTemplateSuffix contains '-template' and arrSplitSuffix.size == 3
+      assign isV6GpTemplate = true
+    endif
+    assign gpShopMeta = shop.metafields.gempages
+    if gpShopMeta
+      if gpShopMeta['productV6-default'] == 'true' and request.page_type == 'product'
+        assign isProductDefault = true
+      endif
+      if gpShopMeta['collectionV6-default'] == 'true' and request.page_type == 'collection'
+        assign isCollectionDefault = true
+      endif
+      if gpShopMeta['indexV6-default'] == 'true' and request.page_type == 'index'
+        assign isIndexDefault = true
+      endif
+      if isProductDefault or isCollectionDefault or isIndexDefault or isPreviewV6
+        assign isV6GpTemplate = true
+      endif
+    endif
+  %}
+  {% if isV6GpTemplate %}
+    {% render 'gem-app-footer-scripts', GEM_FOOTER_SCRIPT: GEM_FOOTER_SCRIPT %}
+  {% endif %}
+<!--End_Gem_Page_Footer_Script-->
+
+
+{% include 'booster-discounts' %}
+
+  <!-- PLM : Microsoft ads balise de suivi de conversion -->
+<script type='text/javascripts'>(function(w,d,t,r,u){var f,n,i;w[u]=w[u]||[],f=function(){var o={ti:"56138720"};o.q=w[u],w[u]=new UET(o),w[u].push("pageLoad")},n=d.createElement(t),n.src=r,n.async=1,n.onload=n.onreadystatechange=function(){var s=this.readyState;s&&s!=="loaded"&&s!=="complete"||(f(),n.onload=n.onreadystatechange=null)},i=d.getElementsByTagName(t)[0],i.parentNode.insertBefore(n,i)})(window,document,"script","//bat.bing.com/bat.js","uetq");</script>
+  
+  {% include 'appikon-discounts' %}{% include 'adroll' %}
+{% include 'grconnect-widgets' %} 
+ <script src="{{ 'custom.min.js' | asset_url }}" defer></script>
+  <style>
+    body{
+      line-height: 1.6;
+    }
+    .gf_button, .gf_add-to-cart{
+      line-height: 1.6 !important;
+      text-transform: inherit;
+    }
+    .text-link, a{
+      color: #222323;
+    }
+    .prod-slider-image {
+      height: auto;
+    }
+  </style>
+  <div style="display:none;" id="af_hidepp_btn"><div class="additional-checkout-buttons">{{ content_for_additional_checkout_buttons }}</div></div>
+
+    <script>
+        let psw = document.getElementById("product__slider")
+        psw.style.visibility = 'hidden'
+        window.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+              psw.style.visibility = 'visible'
+            },1000)
+        });
+    </script>
+  
+</body>
+</html>
+{% endcapture %} {% assign content = content | replace: 'xs" data-exc=""><img src="https://ucarecdn.com/', 'xs" data-exc=""><img data-src="https://ucarecdn.com/' | replace: 'lg" data-exc=""><img src="https://ucarecdn.com/', 'lg" data-exc=""><img data-src="https://ucarecdn.com/' | replace: 'class="gf_image"', 'class="gf_image lazyload"' | replace: ' href= "https://d1um8515vdn9kb.cloudfront.net/files/gfv1animate', ' data-href= "https://d1um8515vdn9kb.cloudfront.net/files/gfv1animate' | replace: 'href= "https://d1um8515vdn9kb.cloudfront.net/libs/', 'data-href= "https://d1um8515vdn9kb.cloudfront.net/libs/' | replace: 'href="//fonts.googleapis.com/css', 'data-href="//fonts.googleapis.com/css' | replace: 'href="https://maxcdn.bootstrapcdn.com/font-awesome/', 'data-href="https://maxcdn.bootstrapcdn.com/font-awesome/' | replace: 'src="https://d1um8515vdn9kb.cloudfront.net/files/gempagev2', 'data-src="https://d1um8515vdn9kb.cloudfront.net/files/gempagev2' %} {{content}}
+ 
+<!--Gem_Page_Footer_Script-->
+  {%- liquid
+    assign gpTemplateSuffix = template.suffix
+    assign arrSplitSuffix = gpTemplateSuffix | split: '-'
+    if gpTemplateSuffix contains 'gem-' and gpTemplateSuffix contains '-template' and arrSplitSuffix.size == 3
+      assign isV6GpTemplate = true
+    endif
+    assign gpShopMeta = shop.metafields.gempages
+    if gpShopMeta
+      if gpShopMeta['productV6-default'] == 'true' and request.page_type == 'product'
+        assign isProductDefault = true
+      endif
+      if gpShopMeta['collectionV6-default'] == 'true' and request.page_type == 'collection'
+        assign isCollectionDefault = true
+      endif
+      if gpShopMeta['indexV6-default'] == 'true' and request.page_type == 'index'
+        assign isIndexDefault = true
+      endif
+      if isProductDefault or isCollectionDefault or isIndexDefault or isPreviewV6
+        assign isV6GpTemplate = true
+      endif
+    endif
+  %}
+  {% if isV6GpTemplate %}
+    {% render 'gem-app-footer-scripts', GEM_FOOTER_SCRIPT: GEM_FOOTER_SCRIPT %}
+  {% endif %}
+<!--End_Gem_Page_Footer_Script-->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Urbanist:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+<style>
+  #PageContainer .gf_view-more.stylebutton_white,
+  #PageContainer .gf_button.stylebutton_white,
+  #PageContainer .gf_add-to-cart.stylebutton_white,
+  #PageContainer .gf_view-more.stylebutton,
+  #PageContainer .gf_button.stylebutton,
+  #PageContainer .gf_add-to-cart.stylebutton{
+  	box-shadow:none !important;
+  }
+  [data-label="Tabs"] .item-content{
+    min-height: auto !important;
+  }
+  .template-product .main-content{
+    padding-top: 0px !important;
+  }
+  @media screen and (min-width: 769px){
+    .template-product .main-content{
+      padding-top: 20px !important;
+    }
+  }
+  #chat-button {
+    bottom: 90px !important;
+  }
+ 
+</style>
+
+<!--  PLM add Add to Cart snipped for Klaviyo -->
+{%  if product %}
+
+<script>
+window.addEventListener('load', function() {
+var _learnq = window._learnq || [];
+function addedToCart() {
+  fetch(`${window.location.origin}/cart.js`)
+  .then(res => res.clone().json().then(data => {
+    var cart = {
+      total_price: data.total_price/100,
+      $value: data.total_price/100,
+      total_discount: data.total_discount,
+      original_total_price: data.original_total_price/100,
+      items: data.items
+    }
+    if (item !== 'undefined') {
+      cart = Object.assign(cart, item)
+    }
+    if (klAjax) {
+        _learnq.push(['track', 'Added to Cart', cart]);
+        klAjax = false;
+      }
+  }))
+};
+(function (ns, fetch) {
+  ns.fetch = function() {
+    const response = fetch.apply(this, arguments);
+    response.then(res => {
+      if (`${window.location.origin}/cart/add.js`
+      	.includes(res.url)) {
+        	addedToCart()
+      }
+    });
+    return response
+  }
+}(window, window.fetch));
+var klAjax = true;
+var atcButtons = document.querySelectorAll("form[action*='/cart/add'] button[type='submit']");
+for (var i = 0; i < atcButtons.length; i++) {
+    atcButtons[i].addEventListener("click", function() {
+      if (klAjax) {
+        _learnq.push(['track', 'Added to Cart', item]);
+        klAjax = false;
+      }
+    })
+}
+});
+</script>
+
+  {% endif %}
+  {{ 'faq.js' | asset_url | script_tag }}
+  <script src="{{ 'navigation.js' | asset_url }}"></script>
+  <script src="{{ 'date-calculation.js' | asset_url }}"></script>
+  
+
+  {% if template.suffix == "novaa-light-pad-pricetes-pso" %}
+    <script defer>
+      window.addEventListener('load', function() {
+        new GlobalObserver(".shopify-section", {threshold:0.5}, "section")
+        new GlobalObserver(".pso-img",{threshold:.2},"image");
+      })
+    </script>
+
+    
+ 
+  {% endif %}
+   <style>
+      #chat-window{
+        right: 64px !important;
+      }
+    </style>
+  </body>
+</html>
