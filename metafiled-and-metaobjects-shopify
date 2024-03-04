@@ -1,0 +1,184 @@
+<style>
+  .pid-sec{
+    border-top: 1px solid #E5CEC1;
+    padding-top: 48px;
+    margin-top: 82px;
+    max-width: 100vw;
+    overflow: hidden;
+  }
+  .pid-sec-title{
+    margin-bottom: 24px;
+  }
+  .pid-sec-title h2{
+    font-size: 35px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 40px; /* 114.286% */
+    text-transform: capitalize;
+    margin: 0;
+    text-align: center;
+  }
+  .pid-wrapper{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 24px;
+    grid-auto-rows: 1fr;
+  }
+  .pid-item{
+    background: #F8F3F0;
+    display: grid;
+    grid-template-columns: 135px 1fr;
+    grid-gap: 45px;
+    align-items: center;
+    box-sizing: border-box;
+    padding: 41px 61px 41px 20px;
+  }
+  .pid-img{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .pid-img img{
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+  .pid-info{
+    
+  }
+  .pid-info h2{
+    margin: 0;
+    color: var(--TEXT, #5E5047);
+    font-size: 20px;
+    font-style: normal;
+    font-weight: 500;
+    line-height: 26px; /* 130% */
+    text-transform: capitalize;
+    margin-bottom: 16px;
+  }
+  .pid-info p{
+    margin: 0;
+    color: var(--BLACK, #000);
+    font-size: 16px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: 24px; /* 150% */
+  }
+
+  @media(max-width: 768px) {
+    .pid-wrapper {
+      grid-template-columns: 1fr;
+      grid-gap: 16px;
+    }
+    .pid-item {
+      grid-template-columns: 96px 1fr;
+      grid-gap: 27px;
+      padding: 11px 18px;
+    }
+    .pid-info h2 {
+      font-size: 16px;
+      line-height: 26px;
+      margin-bottom: 12px;
+    }
+    .pid-info p {
+      font-size: 14px;
+      line-height: 20px;
+    }
+    .pid-sec-title h2 {
+      font-size: 24px;
+      line-height: 30px;
+      max-width: 240px;
+      margin: auto;
+    }
+    .pid-sec {
+      border-top: 1px solid #E5CEC1;
+      padding-top: 24px;
+      margin-top: 24px;
+    }
+  }
+</style>
+
+{% liquid
+  assign info = product.metafields.custom.product_information.value
+  assign image = info.image
+  assign title = info.title
+  assign subTitle = info.sub_title
+  assign heading = info.heading.value
+  assign subHeading = info.text.value
+%}
+
+
+{% unless info == blank %}
+<div class="pid-sec">
+  <div class="page-width">
+    <div class="pid-sec-title">
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+    <div class="pid-wrapper">
+        <div class="pid-item">
+          <div class="pid-img">
+            {{ image | image_url: width: image.width | image_tag }}
+          </div>
+          <div class="pid-info">
+            <h2>{{ title }}</h2>
+            <p>{{ subTitle }}</p>
+            <p>{{ heading | json }}</p>
+          </div>
+        </div>
+      
+    </div>
+  </div>
+</div>
+{% endunless %}
+
+
+{% comment %}
+{% unless product.metafields.custom.product_details == blank %}
+<div class="pid-sec">
+  <div class="page-width">
+    <div class="pid-sec-title">
+      <h2>{{ section.settings.title }}</h2>
+    </div>
+    <div class="pid-wrapper">
+      {% for detail in product.metafields.custom.product_details.value %}
+        <div class="pid-item">
+          <div class="pid-img">
+            {{ detail.image | image_url: width: 200 | image_tag }}
+          </div>
+          <div class="pid-info">
+            <h2>{{ detail.title }}</h2>
+            <p>{{ detail.text }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endunless %}
+{% endcomment %}
+
+{% schema %}
+  {
+    "name": "Product Information",
+    "templates": ["product"],
+    "settings": [
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Section Title",
+        "default": "Powerful ingredients that Work"
+      }
+    ],
+    "presets": [
+      {
+        "name": "Product Information"
+      }
+    ]
+  }
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
