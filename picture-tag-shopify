@@ -1,0 +1,10 @@
+{% unless product.featured_image == blank %}
+  <picture>
+    <source media="(min-width:1920px)" srcset="{{ product.featured_image | image_url: width: 1900 }}">
+    <source media="(min-width:1600px)" srcset="{{ product.featured_image | image_url: width: 1600 }}">
+    <source media="(min-width:1440px)" srcset="{{ product.featured_image | image_url: width: 1400 }}">
+    <source media="(min-width:1024px)" srcset="{{ product.featured_image | image_url: width: 1000 }}">
+    <source media="(min-width:650px)" srcset="{{ product.featured_image | image_url: width: 700 }}">
+    {{ product.featured_image | image_url: width: 400 | image_tag: loading: 'lazy', class: 'new-prod-featured-image' }}
+  </picture>
+{% endunless %}
