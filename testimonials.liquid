@@ -1,0 +1,370 @@
+<style>
+  .cst1--{{ section.id }}{
+    margin-top: {{ section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{ section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{ section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px'}};
+    background: rgba(245, 216, 204, 0.50);
+  }
+  .cts1__wrapper{
+    position: relative;
+  }
+  .cts1__header{
+    text-align: center;
+    margin: 0 0 58px;
+  }
+  .cts1__header h2{
+    color: #000;
+    text-align: center;
+    font-size: 32px;
+    line-height: normal;
+    text-transform: capitalize;
+    margin: 0 0 4px;
+  }
+  .cts1__header p{
+    color: #000;
+    text-align: center;
+    font-size: 14px;
+    line-height: normal;
+    text-transform: capitalize;
+    margin: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+  }
+  .cst1__slider--{{ section.id }}{
+    position: relative;
+  }
+  .cst1__slider--{{ section.id }} .swiper-slide{
+    height: auto;
+    background-color: #FFFFFF;
+  }
+  .cst1__slider--{{ section.id }} .swiper-slide .cst1__item-wrapper{
+    padding: 25px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    box-sizing: border-box;
+    gap: 25px;
+  }
+  .cts1__name{
+    color: #000;
+    font-size: 14px;
+    line-height: normal;
+    margin: 0 0 10px;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+  }
+  .cst1__certificate{
+    color: #000;
+    font-size: 12px;
+    line-height: normal;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    margin: 0 0 17px;
+  }
+  .cst1__text{
+    color: #000;
+    font-size: 16px;
+    line-height: normal;
+  }
+  .cst1__time{
+    color: #000;
+    text-align: right;
+    font-size: 12px;
+    line-height: normal;
+  }
+  .cst1--{{ section.id }} .swiper-button-next, .cst1--{{ section.id }} .swiper-button-prev{
+    top: 65%;
+  }
+
+  @media screen and (min-width: 769px){
+    #pagination--{{ section.id }}{
+      display: none;
+    }
+  }
+  @media screen and (max-width: 768px){
+    .cst1--{{ section.id }}{
+      margin-top: {{ section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{ section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{ section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{ section.settings.padding_bottom_m | append: 'px'}};
+    }
+    .cst1--{{ section.id }} .swiper-button-next, .cst1--{{ section.id }} .swiper-button-prev{
+      display: none;
+    }
+    .cts1__header{
+      text-align: center;
+      margin: 0 0 40px;
+    }
+    .cts1__header h2{
+      font-size: 30px;
+      margin: 0 0 9px;
+    }
+    .cts1__header p{
+      font-size: 12px;
+      gap: 7px;
+      flex-direction: column;
+    }
+    .cst1__slider--{{ section.id }}{
+      position: relative;
+    }
+    .cst1__slider--{{ section.id }} .swiper-slide{
+      height: auto;
+      background-color: #FFFFFF;
+    }
+    .cst1__slider--{{ section.id }} .swiper-slide .cst1__item-wrapper{
+      padding: 25px;
+    }
+    .cts1__name{
+      font-size: 12px;
+      margin: 0 0 10px;
+    }
+    .cst1__text{
+      font-size: 14px;
+    }
+    #pagination--{{ section.id }}{
+      position: static;
+      margin: 32px 0 0;
+    }
+     #pagination--{{ section.id }} .swiper-pagination-bullet{
+       width: 4px;
+       height: 4px;
+     }
+    #pagination--{{ section.id }} .swiper-pagination-bullet.swiper-pagination-bullet-active{
+      width: 30px;
+      background-color: #F5D8CC;
+    }
+  }
+</style>
+<section class="cst1--{{ section.id }}">
+  <div class="cts1__wrapper page-width">
+    {% if section.settings.title != blank or section.settings.subtitle != blank %}
+      <div class="cts1__header">
+        {% if section.settings.title != blank %}
+          <h2>{{ section.settings.title }}</h2>
+        {% endif %}
+        {% if section.settings.subtitle != blank %}
+          <p>
+            <span
+              >Excellent
+              {%- for i in (1..5) -%}
+                {%- render 'all-icons', name: 'black-star' -%}
+              {%- endfor -%}</span
+            ><span>{{ section.settings.subtitle }}</span>
+          </p>
+        {% endif %}
+      </div>
+    {% endif %}
+    {% if section.blocks.size > 0 %}
+      <div class="cst1__slider--{{ section.id }}">
+        <div class="swiper">
+          <div class="swiper-wrapper">
+            {% for block in section.blocks %}
+              <div class="swiper-slide">
+                <div class="cst1__item-wrapper">
+                  <div>
+                    {% if block.settings.title != blank %}
+                      <div class="cts1__name">
+                        {{ block.settings.title -}}
+                        <span>
+                          {%- for i in (1..5) -%}
+                            {%- render 'all-icons', name: 'black-star' -%}
+                          {%- endfor -%}
+                        </span>
+                      </div>
+                    {% endif %}
+                    <div class="cst1__certificate">
+                      <span>{% render 'all-icons', name: 'verify' %}</span> Verified Customer
+                    </div>
+                    {% if block.settings.text != blank %}
+                      <div class="cst1__text">
+                        {{ block.settings.text }}
+                      </div>
+                    {% endif %}
+                  </div>
+                  {% if block.settings.time != blank %}
+                    <div class="cst1__time">
+                      {{ block.settings.time }}
+                    </div>
+                  {% endif %}
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% endif %}
+    <div id="pagination--{{ section.id }}" class="swiper-pagination"></div>
+    <div id="prev--{{ section.id }}" class="swiper-button-prev">{% render 'all-icons', name: 'swiper-left' %}</div>
+    <div id="next--{{ section.id }}" class="swiper-button-next">{% render 'all-icons', name: 'swiper-right' %}</div>
+  </div>
+</section>
+
+<script>
+  new Swiper(".cst1__slider--{{ section.id }} .swiper", {
+    slidesPerView: 1.2,
+    spaceBetween: 23,
+    breakpoints: {
+      769: {
+        slidesPerView: 3,
+      },
+      1024: {
+        slidesPerView: 3,
+      },
+      1200: {
+        slidesPerView: 4,
+        spaceBetween: 23,
+      }
+    },
+    pagination: {
+      el: "#pagination--{{ section.id }}",
+    },
+    navigation: {
+      nextEl: "#next--{{ section.id }}",
+      prevEl: "#prev--{{ section.id }}",
+    },
+  })
+</script>
+{% schema %}
+{
+  "name": "Custom Testimonial 1",
+  "settings": [
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Reviews"
+    },
+    {
+      "type": "text",
+      "id": "subtitle",
+      "label": "Title",
+      "default": "4.78 based on 7,287 reviews"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+     {
+       "name": "Item",
+       "type": "item",
+       "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title",
+          "default": "Sanny Bonzo"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text",
+          "default": "I recently tried out these car wash towels and they're fantastic. They made wiping down my car so easy and left it looking shiny. The towels absorbed water really well too, which sped up the drying process. I also like that they feel durable. Definitely a must-have for any car owner."
+        },
+        {
+          "type": "text",
+          "id": "time",
+          "label": "Time",
+          "default": "1 week ago"
+        }
+       ]
+     }
+   ],
+  "presets": [
+    {
+      "name": "Custom Testimonial 1"
+    }
+  ]
+}
+{% endschema %}
