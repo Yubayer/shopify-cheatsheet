@@ -40,6 +40,18 @@
     right: 10px;
     opacity: 1;
   }
+  .mcart-container.loading:after{
+    position: absolute;
+    content: "";
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 5;
+    background: rgba(0,0,0,10%);
+    cursor: no-drop;
+  }
+
   .mcart-wrapper {
     overflow: auto;
     min-height: 100vh;
@@ -322,7 +334,7 @@
     font-size: 14px;
     font-style: normal;
     font-weight: 600;
-    line-height: 28px;
+    line-height: 1;
     border-radius: 2px;
     background: var(--Primary, #E60000);
     height: 28px;
@@ -625,16 +637,27 @@
         this.querySelector(".mcart-subtotals").innerHTML = html.querySelector(".mcart-subtotals").innerHTML
       if(document.querySelector(".cart_item_count"))
         document.querySelector(".cart_item_count").innerHTML = html.querySelector("mc-drawer").dataset.itemCount
+
+      this.loadingDisabled()
     }
 
     open() {
       this.fetchSection()
+      document.body.style.overflow = 'hidden'
       this.querySelector(".my-cart-sec").classList.add("active")
     }
     close() {
+      document.body.style.overflow = 'unset'
       this.querySelector(".my-cart-sec").classList.remove("active")
     }
 
+    loadingEnabled() {
+      this.querySelector(".mcart-container").classList.add("loading")
+    }
+    loadingDisabled() {
+      this.querySelector(".mcart-container").classList.remove("loading")
+    }
+ 
     debounce(fn, wait) {
       let t;
       return (...args) => {
@@ -670,8 +693,10 @@
         url = e.target.dataset.url
       if(e.currentTarget.tagName === "BUTTON")
         url = e.currentTarget.dataset.url
-      
-      this.closest("mc-drawer").updateItemEvent(url, wrapper)
+
+      let drawer = this.closest("mc-drawer")
+      drawer.loadingEnabled()
+      drawer.updateItemEvent(url, wrapper)
     }
 
     debounce(fn, wait) {
@@ -695,7 +720,9 @@
     }
 
     handleEvent(e) {
-      this.closest("mc-drawer").deleteItemEvent(this.dataset.url)
+      let drawer = this.closest("mc-drawer")
+      drawer.loadingEnabled()
+      drawer.deleteItemEvent(this.dataset.url)
     }
   }
   customElements.define("mc-itemdelete", McItemDelete)
@@ -712,7 +739,9 @@
     }
 
     handleEvent(e) {
-      this.closest("mc-drawer").handleeQuickAddProduct(this.dataset.url, this.button)
+      let drawer = this.closest("mc-drawer")
+      drawer.loadingEnabled()
+      drawer.handleeQuickAddProduct(this.dataset.url, this.button)
     }
   }
   customElements.define("quickadd-prod", QuickAddProduct)
