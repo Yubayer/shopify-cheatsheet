@@ -1,0 +1,256 @@
+<style>
+  .its--{{ section.id }}{
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+    position: relative;
+    overflow: hidden;
+  }
+  .its__slider--{{ section.id }} .swiper-slide{
+    background-color: #E60000;
+  }
+  .its__item-wrapper{
+    padding: 20px;
+  }
+  .its__item-wrapper img{
+    max-width: 50px;
+    margin: 0 0 12px;
+  }
+  .its__item-wrapper h2{
+    color: var(--Pure-White, #FFF);
+    font-size: 20px;
+    line-height: normal;
+    text-transform: uppercase;
+    width: max-content;
+    padding: 0 0 12px;
+    margin: 0 0 12px;
+    position: relative;
+  }
+  .its__item-wrapper h2:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 50%;
+    height: 2px;
+    background-color: #fff;
+  }
+  .its__item-wrapper p{
+    color: var(--Pure-White, #FFF);
+    font-size: 17px;
+    line-height: normal;
+    text-transform: uppercase;
+    margin: 0;
+  }
+  #its__pagi--{{ section.id }}.swiper-pagination{
+    top: 90%;
+    position: static;
+    margin: 20px 0 0;
+    transition: all 0.3s;
+  }
+  #its__pagi--{{ section.id }}.swiper-pagination .swiper-pagination-bullet{
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    opacity: 1;
+  }
+  #its__pagi--{{ section.id }}.swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active{
+    width: 55px;
+    background-color: #500102;
+    border-radius: 10px;
+  }
+
+  @media screen and (max-width: 768px){
+    .its--{{ section.id }}{
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+    .its__item-wrapper h2{
+      font-size: 18px;
+      padding: 0 0 10px;
+      margin: 0 0 10px;
+    }
+    .its__item-wrapper p{
+      font-size: 16px;
+    }
+  }
+</style>
+<section class="its--{{ section.id }}">
+  <div class="its__wrapper page-width">
+    <div class="its__slider--{{ section.id }}">
+      <div class="swiper">
+        <div class="swiper-wrapper">
+          {% for block in section.blocks %}
+            <div class="swiper-slide">
+              <div class="its__item-wrapper">
+                {% if block.settings.image %}
+                  <img width="100%" height="100%" loading="lazy" src="{{ block.settings.image | img_url: "master" }}" alt="{{ block.settings.title }}">
+                {% endif %}
+                {% if block.settings.title != blank %}
+                  <h2>{{ block.settings.title }}</h2>
+                {% endif %}
+                {% if block.settings.text != blank %}
+                  <p>{{ block.settings.text }}</p>
+                {% endif %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+        
+      </div>
+    </div>
+  </div>
+  <div id="its__pagi--{{ section.id }}" class="swiper-pagination"></div>
+</section>
+
+<script>
+  var swiper = new Swiper(".its__slider--{{ section.id }} .swiper", {
+    slidesPerView: 1,
+    pagination: {
+      el: "#its__pagi--{{ section.id }}",
+      clickable: true,
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 2,
+        spaceBetween: 20,
+      },
+      1024: {
+        slidesPerView: 3,
+        spaceBetween: 20,
+      },
+      1400: {
+        slidesPerView: 4,
+        spaceBetween: 20,
+      },
+    },
+  });
+</script>
+{% schema %}
+{
+  "name": "Icon with Text Slider",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+     {
+       "name": "Item",
+       "type": "item",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         },
+         {
+            "type": "text",
+            "id": "title",
+            "label": "Title",
+            "default": "Free Shipping Over $99"
+         },
+         {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text",
+            "default": "Order online and have it delivered free to your home in up to 5 business days."
+          }
+       ]
+     }
+   ],
+  "presets": [
+    {
+      "name": "Icon with Text Slider"
+    }
+  ]
+}
+{% endschema %}
