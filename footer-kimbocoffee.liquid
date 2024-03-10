@@ -1,0 +1,457 @@
+<style>
+  .custom__footer--{{ section.id }}{
+    margin-top: {{ section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{ section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{ section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{ section.settings.padding_bottom | append: 'px'}};
+    border-radius: 14px;
+    background: var(--Pure-White, #FFF);
+    overflow: hidden;
+  }
+  .cf__upper {
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 50px;
+    margin: 0 0 50px;
+  }
+  .cf__logo, .cf__icons a, .cf__contact-item{
+    font-size: 0;
+    line-height: 0;
+  }
+  .cf__logo{
+    margin: 0 0 21px;
+  }
+  .cf__logo img{
+    max-width: 200px;
+  }
+  .cf__icons{
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 0 0 10px;
+    margin: 0 0 30px;
+    position: relative;
+    justify-content: center;
+  }
+  .cf__icons:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    opacity: 0.2;
+    background: var(--Primary, #E60000);
+  }
+  .cf__icons a{
+    display: inline-block;
+  }
+  .cf__icons a img{
+    max-width: 20px;
+  }
+  .cf__contacts-wrapper a{
+    display: inline-block;
+  }
+  .cf__contacts-wrapper a img{
+    width: 18px;
+    height: 18px;
+    object-fit: cover;
+  }
+  .cf__contacts h4{
+    color: var(--Deep-Black, #212121);
+    font-size: 18px;
+    line-height: 20px; /* 111.111% */
+    text-transform: uppercase;
+    width: max-content;
+    padding: 0 0 10px;
+    margin: 0 0 20px;
+    position: relative;
+  }
+  .cf__contacts h4:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 70%;
+    height: 2px;
+    background: var(--Primary, #E60000);
+  }
+  .cf__contacts-wrapper a{
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    color: var(--Deep-Black, #212121);
+    font-size: 20px;
+    line-height: 195%; /* 39px */
+  }
+  .cf__contacts-wrapper a:not(:last-child){
+    margin: 0 0 5px;
+  }
+  .cf__menu-item h4{
+    color: var(--Deep-Black, #212121);
+    font-size: 20px;
+    line-height: 20px; /* 100% */
+    text-transform: uppercase;
+    padding: 0 0 8px;
+    margin: 0 0 18px;
+    position: relative;
+    width: max-content;
+  }
+  .cf__menu-item h4:after{
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 70%;
+    height: 2px;
+    background: var(--Primary, #E60000);
+  }
+  .cf__menu-item a{
+    display: flex;
+    width: max-content;
+    color: var(--Deep-Black, #212121);
+    font-size: 20px;
+    line-height: 195%; /* 39px */
+  }
+  .cf__bottom{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 15px 0;
+    position: relative;
+  }
+  .cf__bottom:before{
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    opacity: 0.1;
+    background: #000;
+  }
+  .cf__copytext{
+    color: var(--Deep-Black, #212121);
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px; /* 142.857% */
+  }
+  .cf__links a{
+    color: var(--Deep-Black, #212121);
+    text-align: center;
+    font-size: 14px;
+    line-height: 20px; /* 142.857% */
+  }
+  @media screen and (max-width: 768px){
+    .custom__footer--{{ section.id }}{
+      margin-top: {{ section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{ section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{ section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{ section.settings.padding_bottom_m | append: 'px'}};
+    }
+    .cf__upper {
+      flex-direction: column;
+      gap: 35px;
+      margin: 0 0 20px;
+    }
+    .cf__item{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+    .cf__logo{
+      margin: 0 0 25px;
+    }
+    .cf__logo img{
+      max-width: 155px;
+    }
+    .cf__icons{
+      width: 100%;
+    }
+    .cf__icons:after{
+      width: 70%;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+    .cf__contacts-wrapper a img{
+      width: 15px;
+      height: 15px;
+    }
+    .cf__contacts h4{
+      width: 100%;
+    }
+    .cf__contacts h4:after{
+      left: 50%;
+      transform: translateX(-50%);
+      width: 30%;
+      background: var(--Primary, #E60000);
+    }
+    .cf__contacts-wrapper{
+      display: flex;
+      align-items: center;
+      gap: 30px;
+    }
+    .cf__contacts-wrapper a{
+      gap: 15px;
+      font-size: 12px;
+      line-height: normal; /* 39px */
+      margin: 0;
+    }
+    .cf__menu-item h4{
+      font-size: 16px;
+      line-height: 20px;
+      padding: 0 0 8px;
+      margin: 0 0 10px;
+    }
+    .cf__menu-item a{
+      font-size: 14px;
+    }
+    .cf__bottom{
+      padding: 10px 0;
+      flex-direction: column;
+      gap: 15px;
+    }
+    .cf__bottom:before{
+      top: 50%;
+    }
+    .cf__copytext{
+      font-size: 12px;
+      line-height: 16px; /* 142.857% */
+    }
+    .cf__links a{
+      font-size: 12px;
+      line-height: 16px; /* 142.857% */
+    }
+  }
+</style>
+<section class="custom__footer--{{ section.id }} page-width">
+  <div class="cf__wrapper">
+    <div class="cf__upper">
+      <div class="cf__item">
+        {% if section.settings.image %}
+          <div class="cf__logo">
+            <img loading="lazy" src="{{ section.settings.image | img_url: "master" }}" alt="{{ shop.name }}">
+          </div>
+        {% endif %}
+        <div class="cf__icons">
+          {% for block in section.blocks %}
+            {% if block.type == "icon" %}
+              <a href="{{ block.settings.link }}">
+                {% if block.settings.image %}
+                  <img loading="lazy" src="{{ block.settings.image | img_url: "master" }}" alt="Social Icon">
+                {% endif %}
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="cf__contacts">
+          <h4>Contact</h4>
+          <div class="cf__contacts-wrapper">
+            {% for block in section.blocks %}
+              {% if block.type == "address" %}
+                <a href="{{ block.settings.link }}">
+                  {% if block.settings.image %}
+                    <img loading="lazy" src="{{ block.settings.image | img_url: "master" }}" alt="{{ block.settings.title }}">
+                  {% endif %}
+                  {{ block.settings.title }}
+                </a>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+      {% for block in section.blocks %}
+        {% if block.type == "menu" %}
+          <div class="cf__menu-item">
+            <h4>{{ block.settings.menu.title }}</h4>
+            {% for link in block.settings.menu.links %}
+              <a href="{{ link.url }}">{{ link.title }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="cf__bottom">
+      <div class="cf__copytext">
+        {{ section.settings.copytext }}
+      </div>
+      <div class="cf__links">
+        <a href="{{ section.settings.privacy }}">Privacy Policy</a>
+        <span>|</span>
+        <a href="{{ section.settings.terms }}">Terms & Service</a>
+      </div>
+    </div>
+  </div>
+</section>
+{% schema %}
+{
+  "name": "Custom Footer",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image(Logo)"
+    },
+    {
+      "type": "textarea",
+      "id": "copytext",
+      "label": "Copy Right Text"
+    },
+    {
+      "type": "url",
+      "id": "privacy",
+      "label": "Privacy Policy Link"
+    },
+    {
+      "type": "url",
+      "id": "terms",
+      "label": "Terms & Services Link"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+     {
+       "name": "Social Icon",
+       "type": "icon",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         },
+         {
+           "type": "url",
+           "id": "link",
+           "label": "Link"
+         }
+       ]
+     },
+     {
+       "name": "Address",
+       "type": "address",
+       "settings": [
+         {
+           "type": "image_picker",
+           "id": "image",
+           "label": "Image"
+         },
+         {
+           "type": "text",
+           "id": "title",
+           "label": "Title"
+         },
+         {
+           "type": "url",
+           "id": "link",
+           "label": "Link"
+         }
+       ]
+     },
+     {
+       "name": "Menu",
+       "type": "menu",
+       "settings": [
+          {
+            "type": "link_list",
+            "id": "menu",
+            "label": "Menu"
+          }
+       ]
+     }
+   ],
+  "presets": [
+    {
+      "name": "Custom Footer"
+    }
+  ]
+}
+{% endschema %}
