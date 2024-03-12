@@ -1,0 +1,64 @@
+product-media-gellary.luquid file => html code--------------------------------------------------------
+  {%- unless is_duplicate -%}
+      <div class="slider-buttons no-js-hidden quick-add-hidden{% if hide_mobile_slider %} small-hide{% endif %}">
+        <div class="pagination-bubbles">
+          {% for i in (1..media_count) %}
+            <span data-index="{{ forloop.index }}" class="pagination-bubble p_bullet_{{ forloop.index }}"></span>
+          {% endfor %}
+        </div>
+      </div>
+  {%- endunless -%}
+
+// bullet js -----------------------------------------------------------------------
+document.addEventListener("DOMContentLoaded", function() {
+  let paginationBubbles = document.querySelectorAll('.pagination-bubble');
+  paginationBubbles?.forEach((bullet, index, arr) => {
+    bullet.addEventListener("click", e => {
+      let activeSlideEl = document.querySelector(".pagination-bubble.active")
+      let activeSlideIndex = parseInt(activeSlideEl.dataset.index)
+      handleCustomBullet(bullet, index+1, arr, activeSlideIndex)
+    })
+  })
+
+  function handleCustomBullet(bullet, index, arr, activeIndex) {
+    let dir = 'next',length = arr.length, step = 1
+    if(index > activeIndex) {
+      step = index - activeIndex
+    }
+    else{
+      dir = 'prev'
+      step = activeIndex - index
+    }
+    console.log("step: ", step)
+    bullet.closest("slider-component").customGoToSlide(step, dir)
+  }
+})
+
+// global js -> customElements.define('slider-component', SliderComponent); -------------------------------------------------
+  // existing function
+  onButtonClick(event) {
+    event.preventDefault();
+    const step = event.currentTarget.dataset.step || 1;
+    this.slideScrollPosition =
+      event.currentTarget.name === 'next'
+        ? this.slider.scrollLeft + step * this.sliderItemOffset
+        : this.slider.scrollLeft - step * this.sliderItemOffset;
+    this.setSlidePosition(this.slideScrollPosition);
+  }
+
+  // custom bullet function
+  customGoToSlide(step, dir='next') {
+    if(dir === 'next') {
+      this.setSlidePosition(this.slider.scrollLeft + step * this.sliderItemOffset)
+    } else {
+      console.log(this.slider.scrollLeft, step, this.sliderItemOffset)
+      this.setSlidePosition(this.slider.scrollLeft - step * this.sliderItemOffset)
+    }
+  }
+
+// existing function
+  setSlidePosition(position) {
+    this.slider.scrollTo({
+      left: position,
+    });
+  }
