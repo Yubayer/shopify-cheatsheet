@@ -36,6 +36,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
 // global js -> customElements.define('slider-component', SliderComponent); -------------------------------------------------
 
+// existing function => add some code
 update() {
     // Temporarily prevents unneeded updates resulting from variant changes
     // This should be refactored as part of https://github.com/Shopify/dawn/issues/2057
