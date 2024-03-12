@@ -35,6 +35,38 @@ document.addEventListener("DOMContentLoaded", function() {
 })
 
 // global js -> customElements.define('slider-component', SliderComponent); -------------------------------------------------
+
+update() {
+    // Temporarily prevents unneeded updates resulting from variant changes
+    // This should be refactored as part of https://github.com/Shopify/dawn/issues/2057
+    if (!this.slider || !this.nextButton) return;
+
+    const previousPage = this.currentPage;
+    this.currentPage = Math.round(this.slider.scrollLeft / this.sliderItemOffset) + 1;
+
+    if (this.currentPageElement && this.pageTotalElement) {
+      this.currentPageElement.textContent = this.currentPage;
+      this.pageTotalElement.textContent = this.totalPages;
+    }
+
+    
+
+    if (this.currentPage != previousPage) {
+      // goto Active bullet -> custom bullet
+      this.bullests?.forEach(bullet => bullet.classList.remove("active"))
+      document.querySelector(`.p_bullet_${this.currentPage}`).classList.add("active")
+      // end goto Active bullet -> custom bullet
+      
+      this.dispatchEvent(
+        new CustomEvent('slideChanged', {
+          detail: {
+            currentPage: this.currentPage,
+            currentElement: this.sliderItemsToShow[this.currentPage - 1],
+          },
+        })
+      );
+    }
+
   // existing function
   onButtonClick(event) {
     event.preventDefault();
