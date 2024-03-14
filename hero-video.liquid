@@ -1,0 +1,218 @@
+{% liquid
+  assign id = section.id
+  assign settings = section.settings
+  assign blocks = section.blocks
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+
+  .video-wrapper-{{ id }} {
+    position: relative;
+  }
+  .video-wrapper-{{ id }} video{
+    width: 100%;
+    height: auto;
+  }
+  .video-wrapper-{{ id }} svg{
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 71px;
+    height: 71px;
+    z-index: 3;
+    object-fit: cover;
+  }
+  .video-wrapper-{{id}}.playing svg{
+    visibility: hidden;
+  }
+</style>
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-{{ id }}">
+      <div class="video-wrapper-{{ id }}">
+        {% unless section.settings.video == blank %}
+          {{
+            section.settings.video
+            | video_tag: image_size: '1000x', autoplay: false, loop: true, muted: false, controls: false
+          }}
+        {% endunless %}
+        <svg xmlns="http://www.w3.org/2000/svg" width="71" height="71" viewBox="0 0 71 71" fill="none">
+          <path d="M22.5716 53C21.8896 53 21.2355 52.7366 20.7532 52.2677C20.2709 51.7989 20 51.163 20 50.4999V20.4988C20.0002 20.0728 20.1124 19.6539 20.3259 19.2819C20.5394 18.9099 20.8472 18.5971 21.22 18.3732C21.5927 18.1493 22.0182 18.0217 22.4559 18.0025C22.8937 17.9834 23.3292 18.0733 23.7211 18.2637L54.5806 33.2642C55.0072 33.4721 55.3659 33.7912 55.6166 34.186C55.8672 34.5807 56 35.0354 56 35.4993C56 35.9632 55.8672 36.418 55.6166 36.8127C55.3659 37.2074 55.0072 37.5266 54.5806 37.7344L23.7211 52.735C23.3643 52.9088 22.9707 52.9995 22.5716 53Z" fill="white"/>
+          <path d="M35.5 0C28.4788 0 21.6152 2.08204 15.7773 5.98283C9.93932 9.88362 5.3892 15.428 2.70229 21.9147C0.0153815 28.4015 -0.687637 35.5394 0.682138 42.4257C2.05191 49.312 5.43296 55.6375 10.3977 60.6023C15.3625 65.567 21.688 68.9481 28.5743 70.3179C35.4606 71.6876 42.5985 70.9846 49.0853 68.2977C55.572 65.6108 61.1164 61.0607 65.0172 55.2227C68.918 49.3848 71 42.5212 71 35.5C71 26.0848 67.2598 17.0552 60.6023 10.3977C53.9447 3.74017 44.9152 0 35.5 0ZM54.3835 37.7695L23.9549 52.9837C23.5682 53.177 23.1386 53.2681 22.7067 53.2486C22.2749 53.229 21.8552 53.0994 21.4876 52.872C21.1199 52.6446 20.8165 52.327 20.6062 51.9494C20.3958 51.5717 20.2855 51.1466 20.2857 50.7143V20.2857C20.286 19.8536 20.3966 19.4288 20.6071 19.0515C20.8176 18.6742 21.1211 18.357 21.4887 18.1299C21.8562 17.9028 22.2757 17.7734 22.7073 17.7539C23.139 17.7345 23.5684 17.8256 23.9549 18.0188L54.3835 33.2331C54.8041 33.4439 55.1578 33.7676 55.4049 34.1679C55.6521 34.5683 55.783 35.0295 55.783 35.5C55.783 35.9705 55.6521 36.4317 55.4049 36.8321C55.1578 37.2324 54.8041 37.5561 54.3835 37.7669" fill="#E60000" fill-opacity="0.32"/>
+        </svg>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let playPauseBtn = document.querySelector(".video-wrapper-{{ id }} svg")
+  let newVideo = document.querySelector(".video-wrapper-{{ id }} video")
+
+  playPauseBtn.addEventListener("click", e => {
+    handleVideoControl(e)
+  })
+  newVideo.addEventListener("click", e => {
+    handleVideoControl(e)
+  })
+
+  function handleVideoControl(e) {
+    let wrapper = e.target.closest("div")
+    if(newVideo.paused) {
+      newVideo.play()
+      wrapper.classList.add("playing")
+    } else {
+      newVideo.pause()
+      wrapper.classList.remove("playing")
+    }
+  }
+</script>
+
+{% schema %}
+{
+  "name": "New Video",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "video",
+      "id": "video",
+      "label": "Video"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "New Video"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
