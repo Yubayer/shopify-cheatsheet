@@ -1,0 +1,65 @@
+<script>
+  var isHighlighted = false;
+  var lastScrollPosition = 0;
+  var threshold = 20;
+
+  // window.addEventListener('scroll', function() {
+  //     var scrollPosition = window.scrollY;
+  //     var body = document.body;
+
+  //     if (Math.abs(scrollPosition - lastScrollPosition) > threshold) {
+  //         if (scrollPosition >= 500) {
+  //             if (!isHighlighted) {
+  //                 body.classList.add('highlight');
+  //                 isHighlighted = true;
+  //             }
+  //         } else {
+  //             if (isHighlighted) {
+  //                 body.classList.remove('highlight');
+  //                 isHighlighted = false;
+  //             }
+  //         }
+
+  //         lastScrollPosition = scrollPosition;
+  //     }
+  // });
+
+
+
+
+  function throttle(mainFunction, delay) {
+    let timerFlag = null;
+
+    return (...args) => {
+      if (timerFlag === null) {
+        mainFunction(...args);
+        timerFlag = setTimeout(() => {
+          timerFlag = null;
+        }, delay);
+      }
+    };
+  }
+
+  function fetchData() {
+    var scrollPosition = window.scrollY;
+      var body = document.body;
+      if (Math.abs(scrollPosition - lastScrollPosition) > threshold) {
+          if (scrollPosition >= 500) {
+              if (!isHighlighted) {
+                  body.classList.add('highlight');
+                  isHighlighted = true;
+              }
+          } else {
+              if (isHighlighted) {
+                  body.classList.remove('highlight');
+                  isHighlighted = false;
+              }
+          }
+
+          lastScrollPosition = scrollPosition;
+      }
+  }
+
+  const throttledFetchData = throttle(fetchData, 200);
+  window.addEventListener("scroll", throttledFetchData);
+</script>
