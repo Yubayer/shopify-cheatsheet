@@ -1,0 +1,242 @@
+{% liquid
+  assign id = section.id
+%}
+
+<style>
+  #shopify-section-{{id}} {
+    box-sizing: border-box;
+    margin-top: {{section.settings.margin_top | append: 'px'}};
+    margin-bottom: {{section.settings.margin_bottom | append: 'px'}};
+    padding-top: {{section.settings.padding_top | append: 'px'}};
+    padding-bottom: {{section.settings.padding_bottom | append: 'px'}};
+  }
+
+  @media(max-width: 768px) {
+    #shopify-section-{{id}} {
+      margin-top: {{section.settings.margin_top_m | append: 'px'}};
+      margin-bottom: {{section.settings.margin_bottom_m | append: 'px'}};
+      padding-top: {{section.settings.padding_top_m | append: 'px'}};
+      padding-bottom: {{section.settings.padding_bottom_m | append: 'px'}};
+    }
+  }
+
+  .card-x button{
+    font-size: 0px;
+    height: 50px;
+    width: 50px;
+    border-radius: 50%;
+    border: none;
+    transform-origin: center;
+    transform: rotate(359deg);
+    margin-right: 10px;
+  }
+</style>
+
+{% assign hash = 'Jobayer' | md5 %}
+{% assign text = hash | md5 %}
+
+{{ hash }} -- {{ text }}
+
+{% assign product = all_products[section.settings.product] %}
+{% assign colors = '#Blue:Black, #Black:Blue, #Navy:Red, #Red:Navy, #Yellow:Orange, #Orange:Yellow'
+  | strip
+  | remove: ' '
+%}
+
+{{ colors }}
+
+<div class="sec-{{ id }}">
+  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
+    <div class="wrapper-x">
+      <div class="card-x">
+        <div class="media-x">
+          {{ product.featured_image | image_url: width: 400 | image_tag }}
+        </div>
+        <div class="info-x">
+          <h2>{{ product.title }}</h2>
+          <h2>{{ product.selected_or_first_available_variant.price | money_with_currency }}</h2>
+          <div class="swatch-x">
+            {% for value in product.options_by_name.Color.values %}
+              {% liquid
+                if value contains ' '
+                  assign isDouble = true
+                  assign single = value | split: ' '
+                  assign first = '#' | append: single[0]
+                  assign second = '#' | append: single[1]
+
+                  if colors contains first
+                    assign firstColor = colors | split: first | last | split: ',' | first | remove: ':'
+                  else
+                    assign firstColor = first | remove: '#'
+                  endif
+                  if colors contains second
+                    assign secondColor = colors | split: second | last | split: ',' | first | remove: ':'
+                  else
+                    assign secondColor = second | remove: '#'
+                  endif
+                else
+                  assign self = '#' | append: value
+                  if colors contains self
+                    assign singlColor = colors | split: self | last | split: ',' | first | remove: ':'
+                  else
+                    assign singlColor = self
+                  endif
+                  assign isDouble = false
+                endif
+              %}
+              {% if isDouble %}
+                <button
+                  title="{{ firstColor }} {{ secondColor }}"
+                  style="background: linear-gradient(to right, {{ firstColor }} 50%, {{ secondColor }} 50%)"
+                >
+                  {{ first | remove: '#' }}-{{ second | remove: '#' }} * {{ firstColor }}-{{ secondColor }}
+                </button>
+              {% else %}
+                <button title="{{ singlColor }}" style="background: {{ singlColor }}">
+                  {{ value }} - {{ singlColor }}
+                </button>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Custom Product",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "full_width",
+      "label": "Full Width Section",
+      "default": true
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Select product"
+    },
+    {
+      "type": "textarea",
+      "id": "heading",
+      "label": "heading",
+      "default": "Discover the Secret to Perfect Skin"
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Desktop"
+    },
+    {
+      "type": "range",
+      "id": "margin_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    },
+    {
+      "type": "header",
+      "content": "Section Spacing Mobile"
+    },
+    {
+      "type": "range",
+      "id": "margin_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Top",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "margin_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Margin Bottom",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding_top_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Top",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding_bottom_m",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "label": "Padding Bottom",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text",
+      "name": "text",
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Custom Product"
+    }
+  ]
+}
+{% endschema %}
+
+{% stylesheet %}
+{% endstylesheet %}
+
+{% javascript %}
+{% endjavascript %}
