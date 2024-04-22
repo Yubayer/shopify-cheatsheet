@@ -1,0 +1,11 @@
+#Responsive Image Techniques:
+<picture>
+  <source srcset="{{ image.src | img_url: 'large' }}" media="(min-width: 1024px)">
+  <img src="{{ image.src | img_url: 'medium' }}" alt="{{ image.alt }}">
+</picture>
+
+#Preload Important Resources:
+<link rel="preload" href="{{ 'styles.css' | asset_url }}" as="style" onload="this.onload=null;this.rel='stylesheet'">
+
+#Avoid Flashing Content:
+Ensure that content doesn't flash or disappear when loading. Use CSS techniques like hiding content until it's fully loaded (visibility: hidden) or using opacity transitions to fade it in gradually (opacity: 0 to opacity: 1).
