@@ -1,0 +1,122 @@
+{% comment %}
+  @param image_item
+    An Image Drop to display.
+
+  @param image_src
+    An some image URL to display.
+
+  @param image_width
+    Image width for src attr.
+
+  @param image_widths
+  An array of image widths to generate srcset attr.
+
+  @param image_sizes
+    An array of image sizes to generate sizes attr.
+
+  @param image_nolazy {Boolean} (optional)
+    Load image without lazy.
+
+  @param image_preload {Boolean} (optional)
+    Generate preload meta tag.
+
+  @param image_classes {String} (optional)
+    Additional classes added to the image tag.
+
+  @param image_id {String} (optional)
+    ID added to the image tag.
+
+  @param image_styles {String} (optional)
+    Styles added to the image tag.
+
+  @param image_alt {String} (optional)
+    Alt added to the image tag.
+
+  Example:
+  {%-
+    render 'component-image',
+    image_item: section.settings.image,
+    image_src: 'some-generated-url',
+    image_width: '800',
+    image_widths: '400,600,800,1000',
+    image_sizes: '(min-width: 1025px) 25vw, 100w',
+    image_id: 'some-id',
+    image_classes: 'overlay-logo',
+    image_styles: 'border-radius: 4px',
+    image_alt: 'lorem ipsum',
+    image_preload: true,
+    image_nolazy: true
+  -%}
+
+   {% unless product.featured_image == blank %}
+      {%- render 'component-image',
+        image_item: product.featured_image,
+        image_widths: '182,240,302,604,740,906',
+        image_sizes: '(max-width: 850px) calc(50vw - 20px - 4px), 302px',
+        image_preload: preload
+      -%}
+    {% endunless %}
+{% endcomment %}
+
+{%- assign image_item_preload = image_preload | default: false -%}
+{%- if image_nolazy == true -%}
+    {%- assign image_item_lazyload = false -%}
+{%- else -%}
+    {%- assign image_item_lazyload = true -%}
+{%- endif -%}
+
+{%- assign image_item_id = image_id | default: '' -%}
+{%- assign image_item_classes = image_classes | default: '' -%}
+{%- assign image_item_styles = image_styles | default: '' -%}
+{%- assign image_item_alt = image_alt | default: image_item.alt | escape -%}
+
+{% comment %} image object or static URL {% endcomment %}
+{%- if image_item == nil -%}
+  {%- assign image_item_src = image_src -%}
+{%- else -%}
+  {%- assign image_item_width = image_width | default: image_item.width -%}
+  {%- assign image_item_src = image_item | image_url: width: image_item_width -%}
+  {%- assign image_item_attr_width = image_item.width -%}
+  {%- assign image_item_attr_height = image_item.height -%}
+{%- endif -%}
+
+{%- assign image_item_placeholder = "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///yH5BAEAAAAALAAAAAABAAEAAAIBRAA7" -%}
+{%- assign image_item_sizes = image_sizes | default: '' -%}
+
+{% comment %} --- SRCSET --- {% endcomment %}
+{%- assign image_item_srcset = '' -%}
+{%- assign image_item_widths = image_widths | default: '' -%}
+{%- unless image_item_widths == '' -%}
+  {%- assign image_item_widths_arr = image_item_widths | split: ',' -%}
+  {%- for image_item_width_el in image_item_widths_arr -%}
+    {%- assign image_item_respsrc = image_item | image_url: width: image_item_width_el | append: ' ' | append: image_item_width_el | append: 'w, ' -%}
+    {%- assign image_item_srcset = image_item_srcset | append: image_item_respsrc -%}
+  {%- endfor -%}
+{%- endunless -%}
+
+{%- if image_item_preload == true -%}
+  {{ image_item | image_url: width: image_item_width | image_tag: class: image_item_classes, fetchpriority: 'high', preload: true, widths: image_widths, sizes: image_item_sizes, aspect_ratio: image_item.aspect_ratio, alt: image_item_alt }}
+{%- else -%}
+  <img
+    {% unless image_item_id == '' -%}
+      id="{{ image_item_id }}"
+    {%- endunless %}
+    class="{{ image_item_classes }} {% if image_item_lazyload == true %}lazyload{% endif %}"
+    {%- if image_item_lazyload == true -%}
+      decoding="async"
+      src="{{ image_item_placeholder }}"
+      data-src="{{ image_item_src }}"
+      data-srcset="{{ image_item_srcset }}"
+    {%- else -%}
+      fetchpriority="high"
+      src="{{ image_item_src }}"
+      srcset="{{ image_item_srcset }}"
+    {%- endif -%}
+    sizes="{{ image_item_sizes }}"
+    aspect-ratio="{{ image_item.aspect_ratio }}"
+    width="{{ image_item_attr_width }}"
+    height="{{ image_item_attr_height }}"
+    alt="{{ image_item_alt }}"
+    style="{{ image_item_styles }}"
+  >
+{%- endif -%}
