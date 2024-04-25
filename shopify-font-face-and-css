@@ -1,0 +1,25 @@
+   
+  {{ 'timber.scss.css' | asset_url | stylesheet_tag: preload: true }}
+  {{ 'theme.scss.css' | asset_url | stylesheet_tag: preload: true }}
+  
+  <link rel="stylesheet" href="{{ 'product-card-new.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'component-custom-elements.css' | asset_url }}" media="print" onload="this.media='all'">
+  <link rel="stylesheet" href="{{ 'swiper-bundle.min.css' | asset_url }}" media="print" onload="this.media='all'">
+
+  <style>
+    /* Urbanist headers font */
+    @font-face {
+      font-display: swap;
+      font-family: 'Urbanist';
+      font-style: normal;
+      font-weight: 400;
+      src: url('{{ 'urbanist-v15-latin-400.woff2' | asset_url }}') format('woff2');
+    }
+    @font-face {
+      font-display: swap;
+      font-family: 'Urbanist';
+      font-style: normal;
+      font-weight: 700;
+      src: url('{{ 'urbanist-v15-latin-700.woff2' | asset_url }}') format('woff2');
+    }
+  </style>
