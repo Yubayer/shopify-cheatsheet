@@ -1,0 +1,74 @@
+ <div class="media media--{{ section.settings.image_ratio }} media-mobile--{{ section.settings.mobile_image_ratio }}">
+  {%- if poster != null -%}
+    {{
+      poster
+      | image_url: width: 1500
+      | image_tag:
+        loading: 'lazy',
+        class: 'image-fit medium-hide large-up-hide',
+        sizes: sizes,
+        widths: '375, 750, 1100, 1500, 1780, 2000, 3000',
+        alt: alt
+    }}
+    {{
+      poster_mobile
+      | image_url: width: 1500
+      | image_tag:
+        loading: 'lazy',
+        class: 'image-fit small-hide',
+        sizes: sizes,
+        widths: '375, 750, 1100, 1500, 1780, 2000, 3000',
+        alt: alt
+    }}
+  {%- else -%}
+    {{
+      'hero-apparel-3'
+      | placeholder_svg_tag: 'placeholder-svg placeholder collage-card__image'
+    }}
+  {%- endif -%}
+</div>
+
+-----------------------------------------------
+{{
+  section.settings.video
+  | video_tag:
+    image_size: '1100x',
+    loop: section.settings.enable_video_looping,
+    controls: true,
+    muted: false
+}}
+-------------------------------------------------
+
+
+ <use-animate data-animate="zoom-fade-small" class="media-wrapper">
+  {%- if poster != blank -%}
+    {%- assign alt = 'sections.video.load_video'
+      | t: description: section.settings.description
+      | escape
+    -%}
+    {{
+      poster
+      | image_url: width: 1500
+      | image_tag:
+        loading: 'lazy',
+        class: 'image-fit medium-hide large-up-hide',
+        sizes: sizes,
+        widths: '375, 750, 1100, 1500, 1780, 2000, 3000',
+        alt: alt,
+        is: 'lazy-image'
+    }}
+    {{
+      poster_mobile
+      | image_url: width: 1500
+      | image_tag:
+        loading: 'lazy',
+        class: 'image-fit small-hide',
+        sizes: sizes,
+        widths: '375, 750, 1100, 1500, 1780, 2000, 3000',
+        alt: alt,
+        is: 'lazy-image'
+    }}
+  {%- else -%}
+    {{ 'hero-apparel-3' | placeholder_svg_tag: 'placeholder-svg placeholder collage-card__image' }}
+  {%- endif -%}
+</use-animate>
