@@ -9,6 +9,10 @@
 
 <body>
 
+    <div id="wrapper">
+
+    </div>
+
     <script>
         class ProductCount {
             constructor(url = 'emani.com') {
@@ -17,7 +21,7 @@
                 this.page = this.pages[0]
                 this.limit = 30
                 this.totalProducts = 0
-       
+
                 this.currentUrl = `https://www.${url}/products.json?limit=${this.limit}&page=${this.page}`
                 this.response = null
                 this.handlePage()
@@ -28,30 +32,37 @@
                 for (let index = this.pages[0]; index < this.pages.length; index++) {
 
                     this.page = this.pages[index];
-                    const response = await this.fetchProducts(index);
-                    let products = response.products
-                    if (products.length == 0) {
-                        for(let i = this.pages[index]; i >= prevIndex; i--) {
-                            this.page = i
-                            const response_2 = await this.fetchProducts(index);
-                            if(response_2.products.length != 0) {
-                                let products_2 = response_2.products    
-                                // console.log(products_2, this.page)
-                                if(this.page == 1) {
-                                    this.totalProducts = products_2.length
-                                } else{
-                                    this.totalProducts = products_2.length + (this.page - 1) * this.limit
+
+                    try {
+                        const response = await this.fetchProducts(index);
+                        let products = response.products
+                        if (products.length == 0) {
+                            for (let i = this.pages[index]; i >= prevIndex; i--) {
+                                this.page = i
+                                const response_2 = await this.fetchProducts(index);
+                                if (response_2.products.length != 0) {
+                                    let products_2 = response_2.products
+                                    if (this.page == 1) {
+                                        this.totalProducts = products_2.length
+                                    } else {
+                                        this.totalProducts = products_2.length + (this.page - 1) * this.limit
+                                    }
+
+                                    console.log("Products Per Page: ", this.limit)
+                                    console.log("Total Page: ", this.page)
+                                    console.log("Total Products: ", this.totalProducts)
+                                    document.querySelector("#wrapper").innerHTML = `<h1>Products Per Page: ${this.limit}</h1> <h1>Total Page: ${this.page}</h1> <h1>Total Products: ${this.totalProducts}</h1>`
+                                    break;
+                                } else {
+                                    continue;
                                 }
-                                                
-                                console.log("Products Per Page: ", this.limit)
-                                console.log("Total Page: ", this.page)
-                                console.log("Total Products: ", this.totalProducts)
-                                break;  
-                            } else{
-                                continue;
+
                             }
-                                
+                            break
                         }
+                    }
+                    catch (err) {
+                        alert('Please Enter Valid Shopify Store Domain')
                         break
                     }
 
@@ -78,19 +89,14 @@
                 }
             }
 
-            handleResponse(res) {
-                console.log(res)
-                console.log(res.products)
-
-            }
-
         }
         // new ProductCount('emani.com')
         let domain = prompt("Enter Domain Name", 'emani.com')
-        if(domain !== null && domain.length > 0) {
+
+        if (domain !== null && domain.length > 0) {
             new ProductCount(domain)
         }
-   
+
     </script>
 </body>
 
