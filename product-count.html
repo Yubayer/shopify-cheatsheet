@@ -7,10 +7,28 @@
     <title>Shopify Store Product Count</title>
 </head>
 
+<style>
+    #wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        h1{
+            text-transform: uppercase;
+        }
+        h2{
+            margin: 0;
+            span{
+                background: yellow;
+            }
+        }
+    }
+</style>
+
 <body>
 
     <div id="wrapper">
-
+        <h1>Processing...</h1>
     </div>
 
     <script>
@@ -22,7 +40,7 @@
                 this.limit = 30
                 this.totalProducts = 0
 
-                this.currentUrl = `https://www.${url}/products.json?limit=${this.limit}&page=${this.page}`
+                this.currentUrl = `https://www.${this.url}/products.json?limit=${this.limit}&page=${this.page}`
                 this.response = null
                 this.handlePage()
             }
@@ -51,7 +69,11 @@
                                     console.log("Products Per Page: ", this.limit)
                                     console.log("Total Page: ", this.page)
                                     console.log("Total Products: ", this.totalProducts)
-                                    document.querySelector("#wrapper").innerHTML = `<h1>Products Per Page: ${this.limit}</h1> <h1>Total Page: ${this.page}</h1> <h1>Total Products: ${this.totalProducts}</h1>`
+
+                                    document.querySelector("#wrapper").innerHTML = `<h1>${this.url}</h1>
+                                    <h2>Products Per Page: <span>${this.limit}</span></h2> 
+                                    <h2>Total Page: <span>${this.page}</span></h2> 
+                                    <h2>Total Products: <span>${this.totalProducts}</span></h2>`
                                     break;
                                 } else {
                                     continue;
