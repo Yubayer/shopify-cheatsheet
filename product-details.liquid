@@ -122,7 +122,7 @@
             {% case block.type %}
               {% when 'tab-activate' %}
                 {% if block.settings.where_to_show == 'media' %}
-                  {% render 'pd-tab', product: product, section: section, tabs: tabs, class: 'desktop' %}
+                  {% render 'product-details-tab', product: product, section: section, tabs: tabs, class: 'desktop' %}
                 {% endif %}
             {% endcase %}
           {% endfor %}
@@ -402,9 +402,9 @@
               </div>
             {% when 'tab-activate' %}
               {% if block.settings.where_to_show == 'info' %}
-                {% render 'pd-tab', product: product, section: section, tabs: tabs, class: 'desktop' %}
+                {% render 'product-details-tab', product: product, section: section, tabs: tabs, class: 'desktop' %}
               {% endif %}
-              {% render 'pd-tab', product: product, section: section, tabs: tabs, class: 'mobile' %}
+              {% render 'product-details-tab', product: product, section: section, tabs: tabs, class: 'mobile' %}
           {% endcase %}
         {% endfor %}
       </div>
