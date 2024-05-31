@@ -1,289 +1,299 @@
-{% liquid
-  assign id = section.id
-  assign collectionList = section.blocks | where: 'type', 'collection-list'
-%}
-
-<style>
-  #shopify-section-{{ id }} {
-    box-sizing: border-box;
-    margin-top: {{ section.settings.margin_top | append: 'px' }};
-    margin-bottom: {{ section.settings.margin_bottom | append: 'px' }};
-    padding-top: {{ section.settings.padding_top | append: 'px' }};
-    padding-bottom: {{ section.settings.padding_bottom | append: 'px' }};
-  }
-
-  @media(max-width: 768px) {
-    #shopify-section-{{ id }} {
-      margin-top: {{ section.settings.margin_top_m | append: 'px' }};
-      margin-bottom: {{ section.settings.margin_bottom_m | append: 'px' }};
-      padding-top: {{ section.settings.padding_top_m | append: 'px' }};
-      padding-bottom: {{ section.settings.padding_bottom_m | append: 'px' }};
-    }
-  }
-
-  .heading-wrapper-{{ id }} {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    margin-block: 45px;
-  }
-  .heading-wrapper-{{ id }} h2{
-    color: #000;
-    text-align: center;
-    font-size: 32px;
-    line-height: normal;
-    text-transform: capitalize;
-    margin: 0;
-  }
-  .heading-wrapper-{{ id }} p{
-    color: #000;
-    text-align: center;
-    font-size: 16px;
-    line-height: normal;
-    text-transform: capitalize;
-    margin: 0;
-  }
-
-  .collection-list-{{ id }} {
-    display: grid;
-    grid-template-columns: repeat(6,1fr);
-    grid-column-gap: 11px;
-  }
-  .list-item-{{ id }} {
-    height: 37px;
-    line-height: 37px;
-    display: block;
-    border: 1px solid #F5D8CC;
-    background-color: transparent;
-    box-sizing: border-box;
-    color: #000;
-    text-align: center;
-    font-size: 14px;
-    font-style: normal;
-    font-weight: 400;
-    text-transform: capitalize;
-    cursor: pointer;
-    text-decoration: none;
-  }
-  .list-item-{{ id }}.active{
-    background-color: #e5cec1;
-  }
-
-  @media(max-width: 560px) {
-    .collection-list-{{ id }} {
-      display: flex;
-      flex-wrap: nowrap;
-      gap: 10px;
-      flex-direction: row;
-      overflow-x: auto;
-      overflow-y: hidden;
-    }
-    .collection-list-{{ id }}::-webkit-scrollbar{
-      visibility: hidden;
-      display: none;
-    }
-    .list-item-{{ id }} {
-      min-width: 40%;
-    }
-  }
-</style>
-
-<div class="sec-{{ id }}">
-  <div class="{% unless section.settings.full_width %}page-width{% endunless %}">
-    <div class="heading-wrapper-{{ id }} {% if section.settings.heading == blank and section.settings.heading_text == blank %}hidden{% endif %}">
-      {% unless section.settings.heading == blank %}
-        <h2>
-          {% if section.settings.heading == 'Products' %}
-            Shop All
-          {% else %}
-            {{ section.settings.heading }}
-          {% endif %}
-        </h2>
-      {% endunless %}
-      {% unless section.settings.heading_text == blank %}
-        <p>{{ section.settings.heading_text }}</p>
-      {% endunless %}
-    </div>
-    <div class="collection-list-{{ id }}" id="scrollContainer">
-      {% for block in collectionList %}
-        <a
-          class="list-item-{{ id }} {% if collection.handle == block.settings.collection.handle %}active{% endif %}"
-          href="{{ block.settings.collection.url }}"
-          data-index="{{ forloop.index0 }}"
-        >
-          {{- block.settings.collection.title -}}
-        </a>
-      {% endfor %}
-    </div>
-    <div class="wrapper-{{ id }}">
-      <div class="img-wrapper-{{ id }}"></div>
-    </div>
-  </div>
-</div>
-{% if collectionList.size > 0 %}
-  <script>
-    document.addEventListener('DOMContentLoaded', e => {
-      const scrollContainer = document.getElementById('scrollContainer');
-
-      let touchstartX = 0;
-      let touchendX = 0;
-
-      function handleGesture(left=140) {
-        let dir = 1
-        touchendX < touchstartX ? dir=1 : dir=-1
-        scrollContainer.scrollBy({
-          left: left*dir,
-          behavior: 'smooth'
-        });
-      }
-
-      scrollContainer.addEventListener('touchstart', e => {
-        touchstartX = e.changedTouches[0].screenX;
-      }, false);
-
-      scrollContainer.addEventListener('touchend', e => {
-        touchendX = e.changedTouches[0].screenX;
-        handleGesture();
-      }, false);
-
-      let collectionListItems = document.querySelectorAll(".list-item-{{ id }}")
-      collectionListItems.forEach(item => {
-        if(item.classList.contains('active')) {
-          let index = parseInt(item.dataset.index)
-          handleGesture(index*140*-1)
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flex Slider</title>
+    <style>
+        .flex-slider{
+            width: 98%;
+            margin: 20px auto;
+            box-sizing: border-box;
+            /* border: 2px solid black; */
         }
-      })
-    });
-  </script>
-{% endif %}
-{% schema %}
-{
-  "name": "New Collection Products",
-  "templates": ["collection"],
-  "settings": [
-    {
-      "type": "checkbox",
-      "id": "full_width",
-      "label": "Full Width Section",
-      "default": true
-    },
-    {
-      "type": "text",
-      "id": "heading",
-      "label": "Heading"
-    },
-    {
-      "type": "text",
-      "id": "heading_text",
-      "label": "Text"
-    },
-    {
-      "type": "header",
-      "content": "Section Spacing Desktop"
-    },
-    {
-      "type": "range",
-      "id": "margin_top",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Margin Top",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Margin Bottom",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "padding_top",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Padding Top",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Padding Bottom",
-      "default": 0
-    },
-    {
-      "type": "header",
-      "content": "Section Spacing Mobile"
-    },
-    {
-      "type": "range",
-      "id": "margin_top_m",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Margin Top",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "margin_bottom_m",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Margin Bottom",
-      "default": 24
-    },
-    {
-      "type": "range",
-      "id": "padding_top_m",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Padding Top",
-      "default": 0
-    },
-    {
-      "type": "range",
-      "id": "padding_bottom_m",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "label": "Padding Bottom",
-      "default": 0
-    }
-  ],
-  "blocks": [
-    {
-      "type": "collection-list",
-      "name": "Collection List",
-      "limit": 6,
-      "settings": [
-        {
-          "type": "collection",
-          "id": "collection",
-          "label": "Collection"
+        .flex-slider-wrapper{
+            display: flex;
+            flex-wrap: nowrap;
+            overflow: auto;
         }
-      ]
-    }
-  ],
-  "presets": [
-    {
-      "name": "New Collection Products"
-    }
-  ]
-}
-{% endschema %}
+        .flex-slider-wrapper::-webkit-scrollbar{
+            display: none;
+        }
+        .flex-slider-slide{
+            width: 300px;
+            min-width: 300px;
+            height: 300px;
+            background: red;
+            color: white;
+            font-size: 50px;
+            box-sizing: border-box;
+            /* border: 2px solid indigo; */
+        }
+        .flex-slider-slide.active{
+            box-sizing: border-box;
+            background: green;
+            /* border: 2px solid #000; */
+        }
+        .flex-slider-pagination button.active{
+            background: green;
+            color: #fff;
+        }
+    </style>
+</head>
+<body>
+    <slider-el>
+        <div>
+            <div class="flex-slider">
+                <div class="flex-slider-wrapper">
+                    <div class="flex-slider-slide">1</div>
+                    <div class="flex-slider-slide">2</div>
+                    <div class="flex-slider-slide">3</div>
+                    <div class="flex-slider-slide">4</div>
+                    <div class="flex-slider-slide">5</div>
+                    <div class="flex-slider-slide">6</div>
+                    <div class="flex-slider-slide">7</div>
+                </div>
+                <div class="flex-slider-arrow">
+                    <button class="prev">prev</button>
+                    <button class="next">next</button>
+                </div>
+                <div class="flex-slider-pagination"></div>
+            </div>
+        </div>
+    </slider-el>
+
+    <script>
+        class FlexSlider{
+            constructor(sliderClass, config={}) {
+                this.config = config
+
+                this.touchstartX = 0;
+                this.touchendX = 0;            
+
+                if(document.querySelector(sliderClass)) {
+                    this.sliderContainer = document.querySelector(sliderClass)
+                    if(this.sliderContainer.querySelector(".flex-slider-wrapper")) {
+                        this.sliderWrapper = this.sliderContainer.querySelector(".flex-slider-wrapper")
+                        this.slides = this.sliderWrapper.querySelectorAll(".flex-slider-slide")
+                        if(this.slides.length > 0) {
+                            this.handleConfig()
+                            this.initSlider()
+                            this.enabledClickEvent()
+                            this.enabledTouchGesture()
+
+                            window.addEventListener("resize", e => {
+                                this.handleConfig()
+                                this.initSlider()
+                            })
+                        }
+                    }
+                    
+                }
+            }
+
+            enabledClickEvent() {
+                this.slides.forEach((slide, index) => {
+                    slide.addEventListener("click", e => {
+                        this.goToSlide(index)
+                    })
+                })
+            }
+
+            enabledTouchGesture() {
+                this.sliderWrapper.addEventListener('touchstart', e => {
+                    this.touchstartX = e.changedTouches[0].screenX;
+                }, false);
+
+                this.sliderWrapper.addEventListener('touchend', e => {
+                    this.touchendX = e.changedTouches[0].screenX;
+                    this.handleGesture();
+                }, false);
+            }
+
+            handleConfig() {
+                console.log(this)
+                let config = this.config
+                this.size = this.slides.length
+                this.pagination = config.pagination? config.pagination : false
+                this.arrow = config.arrow? config.arrow : false
+                this.viewItem = config.viewItem? config.viewItem : 1
+                this.gap = config.gap? config.gap : 0
+                this.autoplay = config.autoplay? config.autoplay : false
+
+                if(config.responsive) {
+                    let keys = Object.keys(config.responsive)
+                    if(keys.length > 0) {
+                        for(let i=0; i<keys.length; i++) {
+                            let k = parseInt(keys[i])
+                            if(screen.width <= k) {
+                                let value = config.responsive[keys[i]]
+                                this.gap = value.gap
+                                this.viewItem = value.viewItem
+                                break
+                            }
+                        }
+                    }
+                }
+            }
+
+            initSlider() {
+                this.initWrapper()
+                this.handleArrow()
+                this.handlePagination()
+                this.setActiveClass(0)
+            }
+
+            initWrapper() {
+                this.wrapperWidth = this.sliderWrapper.clientWidth
+                this.slideWidth = ((this.wrapperWidth - (this.gap * (this.viewItem - 1))) / this.viewItem)
+                this.sliderWrapper.style.gap = `${this.gap}px`
+                this.setSlideWidth(this.slideWidth)
+            }
+
+            setSlideWidth(width) {
+                this.slides?.forEach((slide, index) => {
+                    slide.style.width =  `${width}px`
+                    slide.style.minWidth =  `${width}px`
+                });
+            }
+
+            handleArrow() {
+                if(this.arrow) {
+                    if(this.sliderContainer.querySelector(".flex-slider-arrow")) {
+                        let wrapper = this.sliderContainer.querySelector(".flex-slider-arrow")
+                        if(wrapper.querySelectorAll("button")) {
+                            let buttons = wrapper.querySelectorAll("button")
+                            buttons.forEach((btn, index) => {
+                                btn.addEventListener("click", this.throttle(this.handleNextPrev.bind(this), 700))
+                            })
+                        }
+                    }
+                }
+            }
+
+            handleNextPrev(e) {
+                let direction = 1
+                if(e.target.classList.contains('prev')) {
+                    direction = -1
+                } else if(e.target.classList.contains('next')) {
+                    direction = 1
+                }
+                
+                this.gotoNextPrev(direction)
+            }
+            gotoNextPrev(direction) {
+                this.sliderWrapper.scrollBy({
+                    left: (this.slideWidth + this.gap) * direction,
+                    behavior: 'smooth'
+                })
+                this.activeIndex += direction
+                this.activeIndex >= this.size ? this.activeIndex = this.size-1 : this.activeIndex <= 0 ? this.activeIndex = 0 : this.activeIndex
+                this.setActiveClass(this.activeIndex)
+            }
+
+            handlePagination() {
+                if(this.pagination) {
+                    if(this.createPaginationEl()) {
+                        this.handlePaginationButton()
+                    }
+                }
+            }
+            createPaginationEl() {
+                if(this.sliderContainer.querySelector(".flex-slider-pagination")) {
+                    let el = ``
+                    for(let i=0; i< this.size; i++){
+                        el += `<button data-index="${i}">${i+1}</button>`
+                    }
+                    this.sliderContainer.querySelector(".flex-slider-pagination").innerHTML = el
+                    return true
+                }
+                else return false
+            }
+            handlePaginationButton() {
+                let buttons = this.sliderContainer.querySelectorAll(".flex-slider-pagination button")
+                this.paginationsButtons = buttons
+                buttons.forEach((button, index) => {
+                    button.addEventListener("click", e => {
+                        this.goToSlide(index)
+                    })
+                })
+            }
+
+            goToSlide(index) {
+                let slide = this.slides[index]
+                let left = slide.offsetLeft - this.sliderWrapper.offsetLeft
+                this.sliderWrapper.scrollTo({
+                    left: left,
+                    behavior: 'smooth'
+                })
+                this.setActiveClass(index)
+            }
+
+            setActiveClass(index) {
+                this.activeIndex = index
+                this.slides.forEach((slide, i) => {
+                    if(i == index) {
+                        slide.classList.add('active')
+                        this.paginationsButtons[i].classList.add('active')
+                    } else {
+                        slide.classList.remove('active')
+                        this.paginationsButtons[i].classList.remove('active')
+                    }
+                })
+            }
+
+            handleGesture() {
+                let direction = 1
+                this.touchendX < this.touchstartX ? direction=1 : direction=-1
+                console.log(direction, this.touchendX, this.touchstartX)
+                this.gotoNextPrev(direction)
+            }
+
+            throttle(func, limit) {
+                let lastFunc;
+                let lastRan;
+                return function(...args) {
+                    const context = this;
+                    if (!lastRan) {
+                        func.apply(context, args);
+                        lastRan = Date.now();
+                    } else {
+                        clearTimeout(lastFunc);
+                        lastFunc = setTimeout(function() {
+                            if ((Date.now() - lastRan) >= limit) {
+                                func.apply(context, args);
+                                lastRan = Date.now();
+                            }
+                        }, limit - (Date.now() - lastRan));
+                    }
+                };
+            }
+
+        }
+
+        let slider = new FlexSlider(".flex-slider", {
+            pagination: true,
+            arrow: true,
+            viewItem: 4,
+            gap: 15,
+            autoplay: true,
+            responsive: {
+                768: {
+                    gap: 10,
+                    viewItem: 2
+                },
+                1200: {
+                    gap: 20,
+                    viewItem: 3
+                },
+                1400: {
+                    gap: 30,
+                    viewItem: 4
+                }
+            }
+        })
+        slider.goToSlide(2)
+    </script>
+</body>
+</html>
