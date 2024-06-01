@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopify Store Product Count</title>
+</head>
+
+<style>
+    #wrapper{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        h1{
+            text-transform: uppercase;
+        }
+        h2{
+            margin: 0;
+            span{
+                background: yellow;
+            }
+        }
+    }
+</style>
+
+<body>
+
+    <div id="wrapper">
+        <h1>Processing...</h1>
+    </div>
+
+    <script>
+        class ProductCount {
+            constructor(url = 'emani.com') {
+                this.pages = [1, 5, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100]
+                this.url = url
+                this.page = this.pages[0]
+                this.limit = 100
+                this.totalProducts = 0
+
+                this.currentUrl = `https://www.${this.url}/products.json?limit=${this.limit}&page=${this.page}`
+                this.response = null
+                this.handlePage()
+            }
+
+            async handlePage() {
+                let prevIndex = 1
+                for (let index = this.pages[0]; index < this.pages.length; index++) {
+
+                    this.page = this.pages[index];
+
+                    try {
+                        const response = await this.fetchProducts(index);
+                        let products = response.products
+                        if (products.length == 0) {
+                            for (let i = this.pages[index]; i >= prevIndex; i--) {
+                                this.page = i
+                                const response_2 = await this.fetchProducts(index);
+                                if (response_2.products.length != 0) {
+                                    let products_2 = response_2.products
+                                    if (this.page == 1) {
+                                        this.totalProducts = products_2.length
+                                    } else {
+                                        this.totalProducts = products_2.length + (this.page - 1) * this.limit
+                                    }
+
+                                    console.log("Products Per Page: ", this.limit)
+                                    console.log("Total Page: ", this.page)
+                                    console.log("Total Products: ", this.totalProducts)
+
+                                    document.querySelector("#wrapper").innerHTML = `<h1>${this.url}</h1>
+                                    <h2>Products Per Page: <span>${this.limit}</span></h2> 
+                                    <h2>Total Page: <span>${this.page}</span></h2> 
+                                    <h2>Total Products: <span>${this.totalProducts}</span></h2>`
+                                    break;
+                                } else {
+                                    continue;
+                                }
+
+                            }
+                            break
+                        }
+                    }
+                    catch (err) {
+                        alert('Please Enter Valid Shopify Store Domain')
+                        break
+                    }
+
+                    prevIndex = this.pages[index]
+                }
+            }
+
+            updateCurrentURL() {
+                this.currentUrl = `https://www.${this.url}/products.json?limit=${this.limit}&page=${this.page}`
+            }
+
+
+            async fetchProducts(index) {
+                this.updateCurrentURL()
+                try {
+                    const response = await fetch(this.currentUrl);
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    const data = await response.json();
+                    return data
+                } catch (error) {
+                    return error
+                }
+            }
+
+        }
+        // new ProductCount('emani.com')
+        let domain = prompt("Enter Domain Name", 'emani.com')
+
+        if (domain !== null && domain.length > 0) {
+            new ProductCount(domain)
+        }
+
+    </script>
+</body>
+
+</html>
