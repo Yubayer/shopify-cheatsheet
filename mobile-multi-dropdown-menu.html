@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        .mobile-menu-wrapper{
+            width: 400px;
+            min-height: max-content;
+            height: auto;
+            box-sizing: border-box;
+            padding: 10px;
+            border: 2px solid black;
+            border-radius: 5px;
+        }
+        .mobile-parent-menu-wrapper{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mobile-parent-menu-item{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mobile-parent-menu-title{
+            box-sizing: border-box;
+            background: lightgray;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-inline: 10px;
+            cursor: pointer;
+        }
+        .mobile-child-menu-wrapper{
+            box-sizing: border-box;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 0px;
+            overflow: hidden;
+            transition: .4s;
+        }
+        .mobile-child-menu-wrapper.expanded{
+            --height: 0px;
+            height: var(--height);
+        }
+        .mobile-child-menu-item{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mobile-child-menu-title{
+            box-sizing: border-box;
+            background: lightgray;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-inline: 10px;
+            cursor: pointer;
+        }
+        .mobile-grandchild-menu-wrapper{
+            box-sizing: border-box;
+            margin-left: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            height: 0px;
+            overflow: hidden;
+            transition: .4s;
+        }
+        .mobile-grandchild-menu-wrapper.expanded{
+            --height: 0px;
+            height: var(--height);
+        }
+        .mobile-grandchild-menu-item{
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .mobile-grandchild-menu-title{
+            box-sizing: border-box;
+            background: lightgray;
+            height: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-inline: 10px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <mobile-menu data-parent-menu-wrapper="mobile-parent-menu-wrapper" 
+    data-child-menu-wrapper="mobile-child-menu-wrapper" 
+    data-grandchild-menu-wrapper="mobile-grandchild-menu-wrapper">
+    <div class="mobile-menu-wrapper">
+        <div class="mobile-parent-menu-wrapper">
+            <div class="mobile-parent-menu-item">
+                <div class="mobile-parent-menu-title">
+                    <a>Home</a>
+                </div>
+            </div>
+            <div class="mobile-parent-menu-item has-child">
+                <div class="mobile-parent-menu-title dropdown">
+                    <a>Products</a>
+                    <span>+</span>
+                </div>
+                <div class="mobile-child-menu-wrapper">
+                    <div class="mobile-child-menu-item has-grandchild">
+                        <div class="mobile-child-menu-title dropdown">
+                            <a>product 1</a>
+                            <span>+</span>
+                        </div>
+                        <div class="mobile-grandchild-menu-wrapper">
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 1</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 1</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 1</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-child-menu-item has-grandchild">
+                        <div class="mobile-child-menu-title dropdown">
+                            <a>product 2</a>
+                            <span>+</span>
+                        </div>
+                        <div class="mobile-grandchild-menu-wrapper">
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 1</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 2</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 3</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 4</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-child-menu-item">
+                        <div class="mobile-child-menu-title">
+                            <a>product 3</a>
+                        </div>
+                    </div>
+                    <div class="mobile-child-menu-item">
+                        <div class="mobile-child-menu-title">
+                            <a>product 4</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="mobile-parent-menu-item has-child">
+                <div class="mobile-parent-menu-title dropdown">
+                    <a>Collections</a>
+                    <span>+</span>
+                </div>
+                <div class="mobile-child-menu-wrapper">
+                    <div class="mobile-child-menu-item has-grandchild">
+                        <div class="mobile-child-menu-title dropdown">
+                            <a>Collection 1</a>
+                            <span>+</span>
+                        </div>
+                        <div class="mobile-grandchild-menu-wrapper">
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 1</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 2</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 3</a>
+                                </div>
+                            </div>
+                            <div class="mobile-grandchild-menu-item">
+                                <div class="mobile-grandchild-menu-title">
+                                    <a>Jacket 4</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mobile-child-menu-item">
+                        <div class="mobile-child-menu-title">
+                            <a>Collection 2</a>
+                        </div>
+                    </div>
+                    <div class="mobile-child-menu-item">
+                        <div class="mobile-child-menu-title">
+                            <a>Collection 3</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</mobile-menu>
+
+    <script>
+        class MobileMenu extends HTMLElement{ 
+            constructor() {
+                super()
+                this.parentMenuWrapperClass = this.dataset.parentMenuWrapper
+                this.childMenuWrapperClass = this.dataset.childMenuWrapper
+                this.grandchildMenuWrapperClass = this.dataset.grandchildMenuWrapper
+
+                this.childWrapperHeight = 0
+                this.expandedChildWrapper = null
+                this.expandedGrandChildWrapper = null
+
+                this.querySelectorAll(".dropdown").forEach(el => el.addEventListener("click", this.handleClickEvent.bind(this)))
+            }
+
+            handleClickEvent(e) {
+                if(e.target.parentElement.classList.contains('has-child')) {
+                    this.handleChildMenu(e.target.parentElement)
+                }
+                if(e.target.parentElement.classList.contains('has-grandchild')) {
+                    this.handleGrandchildMenu(e.target.parentElement)
+                }
+            }
+
+            handleChildMenu(wrapper) {
+                let childWrapper = wrapper.querySelector(`.${this.childMenuWrapperClass}`)
+                if(!this.expandedChildWrapper) wrapper.classList.add('active')
+                if(childWrapper === this.expandedChildWrapper) {
+                    wrapper.classList.toggle('active')
+                } else{
+                    if(this.expandedChildWrapper) this.expandedChildWrapper.closest(".has-child")?.classList.remove('active')
+                    wrapper.classList.add('active')
+                    this.expandedChildWrapper?.style.setProperty("--height", '0px')
+                    this.expandedChildWrapper?.classList.remove('expanded')
+                    this.expandedChildWrapper?.querySelector(".expanded")?.classList.remove('expanded')
+                    this.expandedChildWrapper?.querySelector(".has-grandchild.active")?.classList.remove('active')
+                }
+
+                childWrapper.classList.toggle('expanded')
+                this.childWrapperHeight = childWrapper.scrollHeight
+                childWrapper.style.setProperty('--height', childWrapper.scrollHeight+'px')
+                this.expandedChildWrapper = childWrapper
+                this.expandedGrandChildWrapper = null
+            }
+
+            handleGrandchildMenu(wrapper) {
+                let grandchild_wrapper = wrapper.querySelector(`.${this.grandchildMenuWrapperClass}`)
+                let expandedChildWrapperHeight = this.expandedChildWrapper.scrollHeight
+                let prevHeight = 0
+
+                if(!this.expandedGrandChildWrapper) wrapper.classList.add('active')
+
+                if(grandchild_wrapper === this.expandedGrandChildWrapper) {
+                    wrapper.classList.toggle('active')
+                } else {
+                    if(this.expandedGrandChildWrapper) this.expandedGrandChildWrapper.closest(".has-child")?.classList.remove('active')
+                    wrapper.classList.add('active')
+                    this.expandedGrandChildWrapper?.classList.remove('expanded')
+                    if(this.expandedGrandChildWrapper)
+                        prevHeight = this.expandedGrandChildWrapper.scrollHeight
+                }
+
+                
+
+                if(grandchild_wrapper.classList.contains('expanded')) {
+                    grandchild_wrapper.classList.remove('expanded')
+                    expandedChildWrapperHeight -= grandchild_wrapper.scrollHeight
+                } else {
+                    grandchild_wrapper.classList.add('expanded')
+                    expandedChildWrapperHeight += grandchild_wrapper.scrollHeight
+                }
+                
+                grandchild_wrapper.style.setProperty('--height', grandchild_wrapper.scrollHeight +'px')
+                this.expandedChildWrapper.style.setProperty('--height', expandedChildWrapperHeight - prevHeight + 'px')
+                this.expandedGrandChildWrapper = grandchild_wrapper
+            }
+        }
+
+        customElements.define("mobile-menu", MobileMenu)
+    </script>
+</body>
+</html>
