@@ -1,0 +1,119 @@
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+
+    function callApi() {
+      let url = `https://mastodon-eminent-aphid.ngrok-free.app/protection?shop=${Shopify.shop}`
+      fetch(url)
+        .then(res => {
+          console.log("response:", res, url)
+        })
+        .catch(err => {
+          console.log(err)
+        })
+    }
+
+    let btns = document.querySelectorAll('.cart__checkout-button');
+    btns.forEach(btn => {
+      btn.addEventListener('click', (e) => {
+        e.preventDefault();
+        callApi()
+      });
+    });
+
+
+    // document.addEventListener('click', function (event) {
+    //   const element = event.target;
+    //   const form = element.closest('form');
+    //   if (form) {
+    //     let cartForm = form.matches('form[action="/cart"]') || form.matches('form[action="/cart/add"]') || form.matches('form[action="/cart/change"]')
+    //     if (cartForm) {
+    //       // console.log(form, "cart: {{ cart.total_price | money_with_currency }}");
+    //       // document.querySelector(".order--protection--el").setAttribute("cart-updated", true)
+    //       // fetchCart()
+    //     }
+    //   }
+
+    // })
+
+
+    function updateProduct() {
+      // URL of your Laravel API endpoint
+      const apiUrl = 'https://mastodon-eminent-aphid.ngrok-free.app/api/update-product?shop=' + Shopify.shop;
+
+      // Example data to send
+      const data = {
+        tatal: 10,
+        key2: 'value2'
+      };
+
+      // Options for the fetch request
+      const fetchOptions = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json',
+        },
+        body: JSON.stringify(data)
+      };
+
+      // Make the fetch request
+      fetch(apiUrl, fetchOptions)
+        .then(response => response.json())
+        .then(data => {
+          console.log('Success:', data);
+          // Handle the response data
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }
+
+    function handleCartUpdate(cart) {
+      console.log('Cart updated:', cart, Shopify.shop);
+      // callApi()
+    }
+
+    function fetchCart() {
+      fetch('/cart.js')
+        .then(response => response.json())
+        .then(cart => handleCartUpdate(cart));
+    }
+
+
+    const targetNode = document.body
+
+    const config = {
+      childList: true, // Observe direct children
+      attributes: false, // Observe attributes
+      subtree: true, // Observe all descendants
+      characterData: true // Observe changes to text nodes
+    };
+
+    const callback = function (mutationsList, observer) {
+      for (const mutation of mutationsList) {
+        const element = mutation.target;
+        const form = element.closest('form');
+        if (form) {
+          let cartForm = form.matches('form[action="/cart"]') || form.matches('form[action="/cart/add"]') || form.matches('form[action="/cart/change"]')
+          if (cartForm) {
+            fetchCart()
+            break
+          }
+        }
+      }
+    };
+
+    const observer = new MutationObserver(callback);
+    observer.observe(targetNode, config);
+  });
+</script>
+
+
+{% schema %}
+{
+"name": "Shipping Protection",
+"target": "body",
+"javascript": "shopping-protection.js",
+"settings": []
+}
+{% endschema %}
