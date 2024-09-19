@@ -1,0 +1,572 @@
+<quick-search class="no-js-hidden p-8 color-scheme color-scheme--none cc-animate-init cc-animate-in">
+  <h3 class="quick-nav__heading h5 text-center mb-6">{{ title }}</h3>
+  <div class="qs-select-options">
+    <!-- first option -->
+    <custom-select-option class="first--option" deactive>
+      <div class="cs--field" openoption>
+        <p class="selected--option">Select Manufacture</p>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          class="icon"
+          role="presentation"
+          focusable="false"
+          aria-hidden="true"
+        >
+          <path d="M20 8.5 12.5 16 5 8.5" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+        </svg>
+      </div>
+      <div class="cs--wrapper">
+        <div class="cs--header">
+          <input type="text" class="cs--search" placeholder="Search...">
+        </div>
+        <div class="cs--list"></div>
+      </div>
+    </custom-select-option>
+
+    <custom-select-option class="second--option" deactive>
+      <div class="cs--field" openoption>
+        <p class="selected--option">Select Model</p>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          class="icon"
+          role="presentation"
+          focusable="false"
+          aria-hidden="true"
+        >
+          <path d="M20 8.5 12.5 16 5 8.5" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+        </svg>
+      </div>
+      <div class="cs--wrapper">
+        <div class="cs--header">
+          <input type="text" class="cs--search" placeholder="Search...">
+        </div>
+        <div class="cs--list"></div>
+      </div>
+    </custom-select-option>
+
+    <custom-select-option class="third--option" deactive>
+      <div class="cs--field" openoption>
+        <p class="selected--option">Select Document Type</p>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          class="icon"
+          role="presentation"
+          focusable="false"
+          aria-hidden="true"
+        >
+          <path d="M20 8.5 12.5 16 5 8.5" stroke="currentColor" stroke-width="1.5" fill="none"></path>
+        </svg>
+      </div>
+      <div class="cs--wrapper">
+        <div class="cs--header">
+          <input type="text" class="cs--search" placeholder="Search...">
+        </div>
+        <div class="cs--list"></div>
+      </div>
+    </custom-select-option>
+  </div>
+  <a
+    href="#"
+    target="_blank"
+    class="btn btn--primary w-full js-submit quick-nav__submit quick-search-submit"
+    {% if color_scheme == 'default' %}
+      style="--btn-bg-color: var(--btn-bg-color-og); --btn-text-color: var(--btn-text-color-og)"
+    {% endif %}
+  >
+    {{ 'Download Manual' }}
+  </a>
+</quick-search>
+
+
+
+///////style
+    quick-search {
+  position: absolute;
+  top: 50%;
+  right: var(--gutter);
+  width: 325px;
+  margin-top: -32px;
+  padding: calc(8 * var(--space-unit));
+  transform: translateY(-50%);
+  pointer-events: auto;
+
+  display: block;
+  z-index: 3;
+  align-self: center;
+  border-radius: var(--overlay-border-radius, 0);
+
+  @media(max-width: 768px) {
+    bottom: inherit !important;
+    top: -60px;
+    left: 50%;
+    transform: translateX(-50%) translateY(-56%);
+  }
+}
+
+custom-select-option {
+  width: 100%;
+  display: block;
+  border-radius: 5px;
+  position: relative;
+  box-sizing: border-box;
+  margin-top: 20px;
+}
+
+.cs--field {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+  border: 2px solid gray;
+  border-radius: 22px;
+  height: 44px;
+  padding-inline: 13px;
+  cursor: pointer;
+
+  p {
+    margin: 0;
+    font-weight: 700;
+  }
+}
+
+.cs--wrapper {
+  overflow: auto;
+  margin-top: 4px;
+  display: none;
+  position: absolute;
+  top: 44px;
+  left: 0;
+  width: max-content;
+  max-width: 350px;
+  min-width: 265px;
+  max-height: 300px;
+  z-index: 999;
+  box-sizing: border-box;
+  border: 2px solid gray;
+  padding: 5px;
+  border-radius: 5px;
+  background: white;
+}
+
+.cs--header {
+  margin-bottom: 5px;
+
+  .cs--search {
+    width: 100%;
+    border: 2px solid gray;
+    box-sizing: border-box;
+    border-radius: 18px;
+    height: 36px;
+    padding-inline: 10px;
+    font-weight: 700;
+  }
+}
+
+custom-select-option.active {
+  .cs--wrapper {
+    display: block;
+  }
+}
+
+.cs--list {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
+
+.cs--option {
+  height: 34px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  padding-inline: 10px;
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.cs--option:hover {
+  background: #80808045;
+}
+
+.quick-search-submit{
+  margin-top: 20px;
+}
+.quick-search-submit[href='#'] {
+  pointer-events: none;
+  opacity: .4;
+}
+custom-select-option[deactive] {
+  opacity: 0.4;
+}
+///////end style
+
+
+
+
+///// js
+window.quickSearchObject = [
+    {
+        "handle": "frymaster",
+        "title": "Frymaster",
+        "secondSteps": []
+    },
+    {
+        "handle": "hardt",
+        "title": "Hardt",
+        "secondSteps": []
+    },
+    {
+        "handle": "merrychef",
+        "title": "MerryChef",
+        "secondSteps": []
+    },
+    {
+        "handle": "pizza-group",
+        "title": "Pizza Group",
+        "secondSteps": [
+            {
+                "parentHandle": "pizza-group",
+                "handle": "dragon-32-level-3-32-electric-oven",
+                "title": "Dragon 32 - Level 3 32&quot; Electric Oven",
+                "thirdSteps": [
+                    {
+                        "parentHandle": "pizza-group",
+                        "childHandle": "dragon-32-level-3-32-electric-oven",
+                        "title": "Test Manual 1",
+                        "handle": "Test_Manual_1",
+                        "url": "malachy-parts-dev.myshopify.com/cdn/shop/files/Test_Manual_1.pdf?v=18085199422947086781"
+                    },
+                    {
+                        "parentHandle": "pizza-group",
+                        "childHandle": "dragon-32-level-3-32-electric-oven",
+                        "title": "Test Manual 2 Alt Text",
+                        "handle": "Test Manual 2 Alt Text",
+                        "url": "malachy-parts-dev.myshopify.com/cdn/shop/files/Test_Manual_2.pdf?v=18085199422947086781"
+                    }
+                ]
+            },
+            {
+                "parentHandle": "pizza-group",
+                "handle": "dragon-48-level-4-48-electric-oven",
+                "title": "Dragon 48 - Level 4 48&quot; Electric Oven",
+                "thirdSteps": [
+                    {
+                        "parentHandle": "pizza-group",
+                        "childHandle": "dragon-48-level-4-48-electric-oven",
+                        "title": "Test Manual 2 Alt Text",
+                        "handle": "Test Manual 2 Alt Text",
+                        "url": "malachy-parts-dev.myshopify.com/cdn/shop/files/Test_Manual_2.pdf?v=18085199422947086781"
+                    },
+                    {
+                        "parentHandle": "pizza-group",
+                        "childHandle": "dragon-48-level-4-48-electric-oven",
+                        "title": "Test Manual 1",
+                        "handle": "Test_Manual_1",
+                        "url": "malachy-parts-dev.myshopify.com/cdn/shop/files/Test_Manual_1.pdf?v=18085199422947086781"
+                    }
+                ]
+            }
+        ]
+    }
+];
+
+const allOptionsData = window.quickSearchObject || [];
+
+
+let firstOptionEl = document.querySelector(".first--option");
+let secondOptionEl = document.querySelector(".second--option");
+let thirdOptionEl = document.querySelector(".third--option");
+
+let firstOptionField = firstOptionEl.querySelector(".cs--field");
+let firstOptionWrapper = firstOptionEl.querySelector(".cs--wrapper");
+
+let secondOptionField = secondOptionEl.querySelector(".cs--field");
+let secondOptionWrapper = secondOptionEl.querySelector(".cs--wrapper");
+
+let thirdOptionField = thirdOptionEl.querySelector(".cs--field");
+let thirdOptionWrapper = thirdOptionEl.querySelector(".cs--wrapper");
+
+let firstOptionSearch = firstOptionEl.querySelector(".cs--search");
+let secondOptionSearch = secondOptionEl.querySelector(".cs--search");
+let thirdOptionSearch = thirdOptionEl.querySelector(".cs--search");
+
+let firstOptionList = firstOptionEl.querySelector(".cs--list");
+let secondOptionList = secondOptionEl.querySelector(".cs--list");
+let thirdOptionList = thirdOptionEl.querySelector(".cs--list");
+
+let firstSelectOptions = firstOptionEl.querySelectorAll(".cs--option");
+let secondSelectOptions = secondOptionEl.querySelectorAll(".cs--option");
+let thirdSelectOptions = thirdOptionEl.querySelectorAll(".cs--option");
+
+let firstSelectedOption = firstOptionEl.querySelector(".selected--option");
+let secondSelectedOption = secondOptionEl.querySelector(".selected--option");
+let thirdSelectedOption = thirdOptionEl.querySelector(".selected--option");
+
+let quickSearchSubmitButton = document.querySelector(".quick-search-submit");
+
+let customSelectConfig = {
+  firstOption: {
+    optionName: "firstOption",
+    customOrRoolEl: firstOptionEl,
+    fieldWrapper: firstOptionField,
+    selectWrapper: firstOptionWrapper,
+    searchInput: firstOptionSearch,
+    listWrapper: firstOptionList,
+    optionLists: firstSelectOptions,
+    selectedOption: firstSelectedOption,
+    isDisabled: false,
+    data: [],
+  },
+  secondOption: {
+    optionName: "secondOption",
+    customOrRoolEl: secondOptionEl,
+    fieldWrapper: secondOptionField,
+    selectWrapper: secondOptionWrapper,
+    searchInput: secondOptionSearch,
+    listWrapper: secondOptionList,
+    optionLists: secondSelectOptions,
+    selectedOption: secondSelectedOption,
+    isDisabled: true,
+    data: [],
+  },
+  thirdOption: {
+    optionName: "thirdOption",
+    customOrRoolEl: thirdOptionEl,
+    fieldWrapper: thirdOptionField,
+    selectWrapper: thirdOptionWrapper,
+    searchInput: thirdOptionSearch,
+    listWrapper: thirdOptionList,
+    optionLists: thirdSelectOptions,
+    selectedOption: thirdSelectedOption,
+    isDisabled: true,
+    data: [],
+  },
+};
+
+function renderOptionList(configOption, optionData) {
+  let optionEl = "";
+  if(optionData.length === 0 ) {
+    configOption.customOrRoolEl.setAttribute("deactive", true)
+  } else {
+    configOption.customOrRoolEl.removeAttribute("deactive")
+  }
+  optionData.forEach((item) => {
+    let dataHandle = item.handle ? item.handle : item.url;
+    optionEl += `<div class="cs--option" data-url="${item.url}" data-handle="${item.handle}" data-title="${item.title}">${item.title}</div>`;
+  });
+
+  configOption.listWrapper.innerHTML = optionEl;
+  configOption.optionLists =
+    configOption.customOrRoolEl.querySelectorAll(".cs--option");
+  // console.log("configOption", configOption)
+}
+
+renderOptionList(customSelectConfig.firstOption, allOptionsData);
+
+// first option toggle select option when click on field
+customSelectConfig.firstOption.fieldWrapper.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  removeSelectedOption(customSelectConfig.secondOption, "Select Model");
+  removeSelectedOption(customSelectConfig.thirdOption, "Select Document Type");
+  quickSearchSubmitButton.href = "#";
+
+  toggleSelectOption(customSelectConfig.firstOption);
+});
+
+// second option toggle select option when click on field
+customSelectConfig.secondOption.fieldWrapper.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+
+  removeSelectedOption(customSelectConfig.firstOption, "", false);
+  // removeSelectedOption(customSelectConfig.secondOption, "Select Model");
+  removeSelectedOption(
+    customSelectConfig.thirdOption,
+    "Select Document Type",
+    true
+  );
+  quickSearchSubmitButton.href = "#";
+
+  toggleSelectOption(customSelectConfig.secondOption);
+});
+
+// third option toggle select option when click on field
+customSelectConfig.thirdOption.fieldWrapper.addEventListener("click", (e) => {
+  e.preventDefault();
+  e.stopPropagation();
+  // removeSelectedOptionFormFirstOption();
+  // removeSelectedOptionFormSecondOption();
+  toggleSelectOption(customSelectConfig.thirdOption);
+});
+
+// click outside first option then hidden first option
+document.addEventListener("click", (e) => {
+  for (const key in customSelectConfig) {
+    const item = customSelectConfig[key];
+    if (!item.customOrRoolEl.contains(e.target)) {
+      item.customOrRoolEl.classList.remove("active");
+    }
+  }
+});
+
+// first option items Lists event click
+customSelectConfig.firstOption.optionLists.forEach((item) => {
+  item.addEventListener("click", (e) => {
+    let selectedData = setActionOptionWhenClickOnOption(
+      customSelectConfig.firstOption,
+      item,
+      e
+    );
+    let selectedValue = selectedData.handle;
+    if (selectedValue && selectedValue != null) {
+      let selectedOptionData = allOptionsData.find(
+        (item) => item.handle === selectedValue
+      );
+      if (
+        selectedOptionData.secondSteps &&
+        selectedOptionData.secondSteps.length > 0
+      ) {
+        customSelectConfig.secondOption.isDisabled = false;
+        customSelectConfig.secondOption.data = selectedOptionData.secondSteps;
+      } else {
+        customSelectConfig.secondOption.isDisabled = true;
+        customSelectConfig.secondOption.data = [];
+      }
+      renderOptionList(
+        customSelectConfig.secondOption,
+        selectedOptionData.secondSteps
+      );
+      secondOptionListOptionsEvent();
+    } else {
+      customSelectConfig.secondOption.isDisabled = true;
+      customSelectConfig.secondOption.data = [];
+    }
+  });
+});
+
+// remove selected option
+function removeSelectedOption(
+  configOption,
+  selectedValue = "",
+  isDisabled = true
+) {
+  if (selectedValue != "")
+    configOption.selectedOption.innerHTML = selectedValue;
+
+  if(isDisabled ) {
+    configOption.customOrRoolEl.setAttribute("deactive", true)
+  } else {
+    configOption.customOrRoolEl.removeAttribute("deactive")
+  }
+  
+  configOption.customOrRoolEl.classList.remove("active");
+  configOption.isDisabled = isDisabled;
+}
+
+// second option items Lists event click
+function secondOptionListOptionsEvent() {
+  customSelectConfig.secondOption.optionLists.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      let selectedData = setActionOptionWhenClickOnOption(
+        customSelectConfig.secondOption,
+        item,
+        e
+      );
+      let selectedValue = selectedData.handle;
+      if (selectedValue && selectedValue != null) {
+        let selectedOptionData = customSelectConfig.secondOption.data.find(
+          (item) => item.handle === selectedValue
+        );
+        if (selectedOptionData) {
+          customSelectConfig.thirdOption.isDisabled = false;
+        } else {
+          customSelectConfig.thirdOption.isDisabled = true;
+        }
+        renderOptionList(
+          customSelectConfig.thirdOption,
+          selectedOptionData.thirdSteps
+        );
+        thirdOptionListOptionsEvent();
+      }
+    });
+  });
+}
+
+// third option items Lists event click
+function thirdOptionListOptionsEvent() {
+  customSelectConfig.thirdOption.optionLists.forEach((item) => {
+    item.addEventListener("click", (e) => {
+      let selectedValue = setActionOptionWhenClickOnOption(
+        customSelectConfig.thirdOption,
+        item,
+        e
+      );
+      if (selectedValue && selectedValue != null) {
+        console.log("third option value", selectedValue);
+        quickSearchSubmitButton.href = selectedValue.url.replace(
+          Shopify.shop,
+          ""
+        );
+      }
+    });
+  });
+}
+
+function setActionOptionWhenClickOnOption(configOption, item, event) {
+  event.preventDefault();
+  event.stopPropagation();
+  let handle = event.target.getAttribute("data-handle");
+  let title = event.target.getAttribute("data-title");
+  let url = event.target.getAttribute("data-url");
+  configOption.selectedOption.innerHTML = title.substring(0, 25);
+  configOption.selectedOption.setAttribute("handle", handle);
+  toggleSelectOption(configOption);
+
+  return {
+    handle,
+    title,
+    url,
+  };
+}
+
+// toggle select option when click outside or click on option or field
+function toggleSelectOption(configOption) {
+  if (configOption.isDisabled) return;
+
+  configOption.customOrRoolEl.classList.toggle("active");
+}
+
+// search individual option
+function searchOption(configOption, value) {
+  let options = configOption.optionLists;
+  options.forEach((item) => {
+    if (item.innerHTML.toLowerCase().indexOf(value.toLowerCase()) > -1) {
+      item.style.display = "flex";
+    } else {
+      item.style.display = "none";
+    }
+  });
+}
+
+// search first option
+firstOptionSearch.addEventListener("input", (e) => {
+  searchOption(customSelectConfig.firstOption, e.target.value);
+});
+
+// search second option
+secondOptionSearch.addEventListener("input", (e) => {
+  searchOption(customSelectConfig.secondOption, e.target.value);
+});
+
+// search third option
+thirdOptionSearch.addEventListener("input", (e) => {
+  searchOption(customSelectConfig.thirdOption, e.target.value);
+});
