@@ -1,0 +1,191 @@
+import { useRouteError } from '@remix-run/react';
+import { authenticate } from '../shopify.server';
+import { json, useLoaderData } from 'react-router';
+
+export default function Bulk() {
+    const loaderData = useLoaderData();
+
+    // console.log(loaderData);
+
+    return (
+        <div>
+            <h1>Bulk</h1>
+            <pre>
+                {JSON.stringify(loaderData, null, 2)}
+            </pre>
+        </div>
+    );
+}
+
+export const loader = async ({ request }) => {
+    const { admin, session } = await authenticate.admin(request);
+
+    const response = await admin.graphql(
+        `#graphql
+        query {
+            shop {
+                name
+            }
+            nodes(ids: ["gid://shopify/Product/7352392515607", "gid://shopify/Product/7352391204887"]) {
+                ... on Product {
+                    id
+                    title
+
+                    variants(first: 10) {
+                        edges {
+                            node {
+                                id
+                                title
+                            }
+                        }
+                    }
+                }
+            }   
+            product1: products(first: 2, query: "7352392515607 OR 7352391204887") {
+                edges {
+                    node {
+                        id
+                        title
+
+                        variants(first: 200) {
+                            edges {
+                                node {
+                                    id
+                                    title
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            product_1_variants: productVariants(first: 10, query: "created_at:<now") {
+                edges {
+                    node {
+                        id
+                        title
+                    }
+                }
+            }
+        }
+        `
+    );
+
+    const data = await response.json();
+
+    const products1 = data.data?.product1.edges.map(({ node }) => node);
+    const products1_ids = products1.map(({ id }) => id);
+    const products1_variants_ids = products1.map(({ variants }) => variants.edges.map(({ node }) => node.id));
+
+    // --------------- bulk products variants create using graphql:  example 1
+    const variantCreateMutationQuery = `#graphql
+        mutation {
+            ${products1_ids.map((productId, index) => {
+                return `productVariantCreate${index + 1} : productVariantCreate(input: {
+                            productId: "${productId}",
+                            options: "${new Date().toISOString()}",
+                            price: "100",
+                            inventoryItem: {
+                                tracked: false,
+                                requiresShipping: false,
+                            },
+                            inventoryPolicy : CONTINUE,
+                        }) {
+                            productVariant {
+                                id
+                                title
+                            }
+                            userErrors {
+                                field
+                                message
+                            }
+                        }
+                    `;
+                })
+            }
+        }
+    `;
+
+    const variantCreateResponse = await admin.graphql(variantCreateMutationQuery);
+    const variantCreateData = await variantCreateResponse.json();
+
+    // --------------- end bulk products variants create using graphql: example 1
+
+    // --------------- bulk products variants delete using graphql:  example 1
+    // delete variants from products1
+    // const mutationQuery1 = `#graphql
+    //         mutation {
+    //             variantDelete1: productVariantsBulkDelete(productId: "gid://shopify/Product/7352391204887", variantsIds: ["gid://shopify/ProductVariant/41694290018327"]) {
+    //                 product {
+    //                     id
+    //                     title
+    //                 }
+    //                 userErrors {
+    //                     field
+    //                     message
+    //                 }
+    //             }
+    //             variantDelete2: productVariantsBulkDelete(productId: "gid://shopify/Product/7352392515607", variantsIds: ["gid://shopify/ProductVariant/41691715993623"]) {
+    //                 product {
+    //                     id
+    //                     title
+    //                 }
+    //                 userErrors {
+    //                     field
+    //                     message
+    //                 }
+    //             }
+    //         }
+    //     `;
+
+    // const response2 = await admin.graphql(mutationQuery1);
+    // const data2 = await response2.json();
+    // -------------- end bulk products variants delete using graphql: example 1
+
+    // --------------- bulk products variants delete using graphql:  example 2
+    // const mutationQuery = `#graphql 
+    // mutation {
+    //     ${products1_ids.map((productId, index) => {
+    //         let variantsIds = products1_variants_ids[index];
+
+    //         return `variantDelete${index + 1}: productVariantsBulkDelete(productId: "${productId}", variantsIds: [${variantsIds.map(id => `"${id}"`).join(',')}]) {
+    //             product {
+    //                 id
+    //                 title
+    //             }
+    //             userErrors {
+    //                 field
+    //                 message
+    //             }
+    //         }`
+    //     })}
+    // }`;
+
+    // const deleteResponse = await admin.graphql(mutationQuery);
+    // const deleteData = await deleteResponse.json();
+    // ---------------- end bulk products variants delete using graphql: example 2
+
+
+    return json({
+        data: data,
+        // variants: products1_variants_ids,
+        // products1_ids: products1_ids,
+        // variantCreateMutationQuery: variantCreateMutationQuery,
+        // variantCreateData: variantCreateData?.data,
+        // data2: data2,
+        // mutationQuery: mutationQuery,
+        // deleteData: deleteData?.data,
+        // mutationQuery1: mutationQuery1,
+        message: 'test'
+    });
+}
+
+export function ErrorBoundary() {
+    const error = useRouteError();
+
+    return (
+        <div>
+            <h1>Error</h1>
+            <pre>{error.message}</pre>
+        </div>
+    );
+}
