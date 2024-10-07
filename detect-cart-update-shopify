@@ -1,0 +1,16 @@
+const originalFetch = window.fetch;
+window.fetch = function(...args) {
+    const result = originalFetch.apply(this, args);
+    
+    // Check if the request is related to the cart
+    result.then(response => {
+        if (response.url.includes('/cart')) {
+            response.clone().json().then(cart => {
+                console.log('Cart AJAX updated', cart);
+                // Your logic here
+            });
+        }
+    });
+    
+    return result;
+};
