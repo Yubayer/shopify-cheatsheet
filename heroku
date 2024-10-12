@@ -1,0 +1,10 @@
+heroku config:get CLEARDB_DATABASE_URL --app shield-insurance
+result: mysql://b94886d33044e5:6e96e77a@us-cluster-east-01.k8s.cleardb.net/heroku_2ba64b494c9131f?reconnect=true
+CLEARDB_DATABASE_URL=mysql://b94886d33044e5:6e96e77a@us-cluster-east-01.k8s.cleardb.net/heroku_2ba64b494c9131f?
+setup database credentials (.env)
+heroku config:set DB_CONNECTION=mysql
+heroku config:set DB_HOST=us-cluster-east-01.k8s.cleardb.net
+heroku config:set DB_PORT=3306
+heroku config:set DB_DATABASE=heroku_2ba64b494c9131f
+heroku config:set DB_USERNAME=b94886d33044e5
+heroku config:set DB_PASSWORD=6e96e77a
