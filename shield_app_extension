@@ -1,0 +1,239 @@
+<script>
+  window.shield_insurance_costs = [];
+  window.shield_insurance_products = {{ shield_settings.products | json }} || [];
+  shield_insurance_products = shield_insurance_products?.map((product) => {
+    return {
+      pid: product.pid,
+      autoOptIn: product.autoOptIn,
+    };
+  });
+
+
+  class ShieldInsuranceApp extends HTMLElement {
+    constructor() {
+      super();
+      this.insurance_inputs = Array.from(document.querySelectorAll('.shield-insurance-input-checkbox'));
+
+      if (this.insurance_inputs) {
+        this.insurance_inputs?.forEach((input) => {
+          input.addEventListener('input', this.handleInsuranceInputSwitch.bind(this));
+        });
+      }
+    }
+
+    handleInsuranceInputSwitch(e) {
+      const productId = e.target.dataset.productId;
+      const isChecked = e.target.checked;
+
+      shield_insurance_products?.map((product) => {
+        if (product.pid === productId) {
+          product.autoOptIn = isChecked;
+        }
+      });
+    }
+  }
+
+  customElements.define('shield-insurance-app', ShieldInsuranceApp);
+
+  const novaaShieldAppFetchDetect = window.fetch;
+  window.fetch = function (...args) {
+    const result = novaaShieldAppFetchDetect.apply(this, args);
+
+    result.then((response) => {
+      if (response.url.includes('/cart/add') || response.url.includes('/cart/update') || response.url.includes('/cart/change')) {
+        getCartItems().then((insuranceCosts) => {
+          replaceUpdatedCostAndRender(insuranceCosts);
+        });
+      }
+    });
+    return result;
+  };
+
+  async function getCartItems() {
+    const cartRaw = await fetch(Shopify.routes.root + 'cart.js')
+    const cartJson = await cartRaw.json();
+
+    const insuranceCosts = calculateInsuranceCost(cartJson);
+    return insuranceCosts;
+  }
+
+  function calculateInsuranceCost(cart) {
+    const shield_settings = {{ shield_settings | json }};
+    const insuranceProducts = shield_settings?.products;
+    const cartItems = cart.items;
+    shield_insurance_costs = [];
+
+    insuranceProducts?.forEach((insuranceProduct) => {
+      let rules = insuranceProduct.rules;
+      let insuranceProductIds = shield_settings.productIds;
+      let excludeProductsIds = insuranceProduct.excludeProductIds || [];
+      let cartTotalExceptExcludedProducts = 0;
+
+      if(excludeProductsIds === null || excludeProductsIds === undefined) {
+        excludeProductsIds = [];
+      }
+
+      if(excludeProductsIds.length > 0) {
+        cartItems?.forEach((item) => {
+          if (!item.requires_shipping || excludeProductsIds.includes(item.product_id.toString()) || insuranceProductIds.includes(item.product_id.toString())) {
+          } else {
+            cartTotalExceptExcludedProducts += item.line_price;
+          }
+        });
+      } else {
+        cartItems?.forEach((item) => {
+          if (!item.requires_shipping || insuranceProductIds.includes(item.product_id.toString())) {
+          } else {
+            cartTotalExceptExcludedProducts += item.line_price;
+          }
+        });
+      }
+
+      let calculatingTotalPrice = (cartTotalExceptExcludedProducts / 100).toFixed(2);
+      let insuranceCost = 0;
+
+      rules?.forEach((rule) => {
+        let max = parseFloat(rule.max);
+        let min = parseFloat(rule.min);
+        let value = parseFloat(rule.value);
+
+        if (min <= calculatingTotalPrice && max >= calculatingTotalPrice) {
+          if (rule.type === '$') {
+            {% comment %} console.log('rule.value', value, min, max); {% endcomment %}
+            insuranceCost = (calculatingTotalPrice > 0 || calculatingTotalPrice > 0.00) ? value : 0;
+          } else {
+            insuranceCost = ((calculatingTotalPrice * value) / 100).toFixed(2);
+          }
+        } else if (max < calculatingTotalPrice) {
+          let lastRule = rules[rules.length - 1];
+          if (rule.type === '$') {
+            insuranceCost = (calculatingTotalPrice > 0 || calculatingTotalPrice > 0.00) ? lastRule.value : 0;
+          } else {
+            insuranceCost = ((calculatingTotalPrice * lastRule.value) / 100).toFixed(2);
+          }
+        }
+      });
+      shield_insurance_costs = [
+        ...shield_insurance_costs,
+        {
+          pid: insuranceProduct.pid,
+          insuranceCost: insuranceCost,
+          currencyRate: parseFloat(Shopify.currency.rate),
+          productType: insuranceProduct.productType,
+        },
+      ];
+    });
+    return shield_insurance_costs;
+  }
+
+  function replaceUpdatedCostAndRender(insuranceCosts=[]) {
+    const insuranceItemsElement = Array.from(document.querySelectorAll('shield-insurance-app .novaa--shield--item'));
+    insuranceItemsElement?.forEach((item) => {
+      insuranceCosts?.map((itm, indx) => {
+        const { pid, insuranceCost } = itm;
+        if (item.dataset.id === pid) {
+          let checkboxElement = item.querySelector('.shield-insurance-input-checkbox');
+          let costElement = item.querySelector('.novaa--insurance--cost');
+
+          if (checkboxElement) checkboxElement.dataset.insuranceCost = insuranceCost;
+          if (costElement) costElement.innerHTML = insuranceCost;
+        }
+      });
+    });
+  }
+
+
+  // Add insurance variant to cart and go to checkout
+  const shieldSecureCheckoutBtn = document.querySelector('.shield__secure__checkout__btn');
+  if (shieldSecureCheckoutBtn) {
+    shieldSecureCheckoutBtn.addEventListener('click', e => getAllInsuranceEstimateConstIfChecked(e));
+  }
+
+  async function getAllInsuranceEstimateConstIfChecked(e) {
+    e.preventDefault();
+    
+    const cartCosts = await getCartItems();
+    const cartCostsFiltered = cartCosts.filter((cost) => {
+      let product = shield_insurance_products.find((p) => p.pid === cost.pid);
+      return product.autoOptIn;
+    });
+    
+
+    console.log("cartCosts xx", cartCosts);
+    console.log("cartCostsFiltered xx", cartCostsFiltered); 
+
+    let cartCount = parseInt('{{ cart.item_count }}');
+    if (cartCount <= 0 ) return;
+
+    if (cartCostsFiltered.length <= 0) {
+      location.href = '/checkout';
+      return;
+    }
+
+    try {
+      fetch(`{{ shop.metafields.shield_insurance.settings.value.appUrl }}/api/insurance-variant-create?shop=${Shopify.shop}`, {
+        method: 'POST',
+        herader: {
+          'Content-Type': 'application/json',
+          "Access-Control-Allow-Origin": "*"
+        },
+        body: JSON.stringify(cartCostsFiltered)
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if(data && data.newVariantsData) {
+            const variantIds = Object.values(data.newVariantsData)
+              .flatMap(variant => variant.productVariants?.map(pv => pv.id));
+
+            const cleanedVariantIds = variantIds.map(id => id.replace("gid://shopify/ProductVariant/", ""));
+            console.log("variantIds ", cleanedVariantIds);
+            addInsuranceVariantToCartAndGotoCheckout(cleanedVariantIds);
+          } else {
+            location.href = '/checkout';
+          }
+        })
+        .catch((error) => {
+          location.href = '/checkout';
+        });
+    } catch (error) {
+      location.href = '/checkout';
+    }
+  }
+
+  // Add insurance variant to cart and go to checkout
+  function addInsuranceVariantToCartAndGotoCheckout(newVariants) {
+    let items = [];
+    newVariants?.forEach((id) => {
+      items = [
+        ...items,
+        {
+          id: id,
+          quantity: 1,
+        },
+      ];
+    });
+    let formData = { items };
+
+    try {
+      fetch(window.Shopify.routes.root + 'cart/add.js', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      })
+        .then((response) => response.json())
+        .then((response) => {
+          location.href = '/checkout';
+        })
+        .catch((error) => {
+          location.href = '/checkout';
+        })
+        .finally(() => {
+          location.href = '/checkout';
+        });
+    } catch (error) {
+      location.href = '/checkout';
+    }
+  }
+</script>
